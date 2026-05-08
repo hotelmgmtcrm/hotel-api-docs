@@ -35050,6 +35050,10 @@
   },
   "servers": [
     {
+      "description": "Production (Vercel)",
+      "url": "https://smart-hotel-api.vercel.app"
+    },
+    {
       "description": "Local development",
       "url": "http://localhost:3001"
     }
