@@ -1,0 +1,103 @@
+name: Sync OpenAPI spec from live API
+
+# Pulls /api/docs-json from the deployed backend on Vercel and commits
+# it to swagger.json so GitHub Pages stays in sync with what's actually
+# running. Three triggers:
+#
+#   - schedule: every 30 min as a safety net (catches drift if the
+#     repository_dispatch is ever missed)
+#   - workflow_dispatch: manual "Sync now" button in the Actions tab
+#   - repository_dispatch (event_type: backend-deployed): fired by the
+#     hotel-backend repo after a successful Vercel deploy, for instant sync
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+  repository_dispatch:
+    types: [backend-deployed]
+
+# Single-flight: cancel any older sync in progress when a newer one starts.
+concurrency:
+  group: sync-openapi
+  cancel-in-progress: true
+
+permissions:
+  contents: write          # required to commit swagger.json back to the repo
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Fetch live OpenAPI spec
+        id: fetch
+        env:
+          API_URL: https://smart-hotel-api.vercel.app/api/docs-json
+        run: |
+          set -euo pipefail
+          # Retry up to 5 times with 10s backoff in case Vercel cold-start
+          # races with the dispatch event.
+          for attempt in 1 2 3 4 5; do
+            if curl -fsSL "$API_URL" -o swagger.new.json; then
+              echo "Fetched on attempt $attempt"
+              break
+            fi
+            echo "Attempt $attempt failed, retrying in 10s..."
+            sleep 10
+          done
+          # Sanity-check: must be valid JSON with a paths object.
+          jq -e '.paths and (.paths | length > 0)' swagger.new.json >/dev/null || {
+            echo "::error::Fetched spec is invalid or empty"
+            exit 1
+          }
+          ENDPOINTS=$(jq '.paths | length' swagger.new.json)
+          SCHEMAS=$(jq '.components.schemas | length // 0' swagger.new.json)
+          echo "endpoints=$ENDPOINTS" >> "$GITHUB_OUTPUT"
+          echo "schemas=$SCHEMAS" >> "$GITHUB_OUTPUT"
+          echo "Live spec: $ENDPOINTS endpoints, $SCHEMAS schemas"
+
+      - name: Detect changes
+        id: diff
+        run: |
+          set -euo pipefail
+          # Pretty-print both for stable, human-readable diffs in the commit
+          jq -S . swagger.new.json > swagger.formatted.json
+          if [ -f swagger.json ]; then
+            jq -S . swagger.json > swagger.current.json || cp swagger.json swagger.current.json
+          else
+            echo "{}" > swagger.current.json
+          fi
+          if cmp -s swagger.formatted.json swagger.current.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No changes — spec already in sync."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "Spec has changed."
+          fi
+          mv swagger.formatted.json swagger.json
+          rm -f swagger.new.json swagger.current.json
+
+      - name: Commit and push
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          ENDPOINTS: ${{ steps.fetch.outputs.endpoints }}
+          SCHEMAS: ${{ steps.fetch.outputs.schemas }}
+          TRIGGER: ${{ github.event_name }}
+        run: |
+          set -euo pipefail
+          git config user.name  'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.noreply.github.com'
+          git add swagger.json
+          git commit -m "chore: sync OpenAPI spec from live API ($ENDPOINTS endpoints, $SCHEMAS schemas) [trigger: $TRIGGER]"
+          git push
+
+      - name: Summary
+        run: |
+          if [ "${{ steps.diff.outputs.changed }}" = "true" ]; then
+            echo "::notice::Synced OpenAPI spec — ${{ steps.fetch.outputs.endpoints }} endpoints, ${{ steps.fetch.outputs.schemas }} schemas"
+          else
+            echo "::notice::Already in sync — ${{ steps.fetch.outputs.endpoints }} endpoints, ${{ steps.fetch.outputs.schemas }} schemas"
+          fi
