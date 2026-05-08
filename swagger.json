@@ -8414,7 +8414,7 @@
     "contact": {},
     "description": "Backend API for the SmartHotel platform — front office, housekeeping, maintenance,\nF&B, sales, CRM, accounts, HR, store, security, and access management.\n\n**Authentication**: Most endpoints require a JWT bearer token. Get one from `POST /auth/login`,\nclick \"Authorize\" above and paste the `access_token` value (without the \"Bearer \" prefix).\n\n**Hotel scope**: Multi-hotel deployments scope data per hotel via the `x-hotel-id` header\nor the user's `currentHotelId`. Most list endpoints accept an optional `hotelId` query param.\n\n**Pagination**: List endpoints accept `page`, `limit`, `search`, `sortBy`, `sortOrder`.\n\n**Date filters**: Endpoints showing `from` / `to` query params accept YYYY-MM-DD and treat\n`to` as inclusive (end-of-day).",
     "title": "Hotel Management API",
-    "version": "1.0"
+    "version": "1.0.1"
   },
   "openapi": "3.0.0",
   "paths": {
