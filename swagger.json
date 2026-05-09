@@ -1721,10 +1721,6 @@
           "resultStatusOther": {
             "type": "string"
           },
-          "reviewDate": {
-            "description": "Internal review date",
-            "type": "string"
-          },
           "soundSetup": {
             "description": "Sound setup items",
             "items": {
@@ -6804,6 +6800,13 @@
           "discountPercentage": {
             "type": "number"
           },
+          "editHistory": {
+            "description": "Server-managed; client-supplied values are ignored",
+            "items": {
+              "type": "array"
+            },
+            "type": "array"
+          },
           "enquiryDate": {
             "type": "string"
           },
@@ -6895,9 +6898,6 @@
             "type": "string"
           },
           "resultStatusOther": {
-            "type": "string"
-          },
-          "reviewDate": {
             "type": "string"
           },
           "soundSetup": {
@@ -13742,6 +13742,72 @@
             "bearer": []
           }
         ],
+        "tags": [
+          "Enquiry"
+        ]
+      }
+    },
+    "/enquiries/{id}/history": {
+      "delete": {
+        "operationId": "EnquiryController_clearEditHistory",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Clear all edit-history log entries for an enquiry",
+        "tags": [
+          "Enquiry"
+        ]
+      }
+    },
+    "/enquiries/{id}/history/{entryId}": {
+      "delete": {
+        "operationId": "EnquiryController_deleteEditHistoryEntry",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "entryId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Delete a single edit-history log entry",
         "tags": [
           "Enquiry"
         ]
