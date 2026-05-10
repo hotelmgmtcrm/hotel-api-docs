@@ -1644,7 +1644,7 @@
           "functions": {
             "description": "Function-specific details",
             "items": {
-              "type": "array"
+              "$ref": "#/components/schemas/FunctionDetailDto"
             },
             "type": "array"
           },
@@ -5454,6 +5454,63 @@
         ],
         "type": "object"
       },
+      "FoodLineDto": {
+        "properties": {
+          "menu": {
+            "type": "string"
+          },
+          "qty": {
+            "type": "number"
+          },
+          "rate": {
+            "type": "number"
+          },
+          "time": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "menu"
+        ],
+        "type": "object"
+      },
+      "FunctionDetailDto": {
+        "properties": {
+          "date": {
+            "type": "string"
+          },
+          "foodLines": {
+            "items": {
+              "$ref": "#/components/schemas/FoodLineDto"
+            },
+            "type": "array"
+          },
+          "pax": {
+            "type": "number"
+          },
+          "remark": {
+            "type": "string"
+          },
+          "time": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "venue": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "venue",
+          "pax"
+        ],
+        "type": "object"
+      },
       "GenerateReportDto": {
         "properties": {
           "endDate": {
@@ -6842,7 +6899,7 @@
           },
           "functions": {
             "items": {
-              "type": "array"
+              "$ref": "#/components/schemas/FunctionDetailDto"
             },
             "type": "array"
           },
