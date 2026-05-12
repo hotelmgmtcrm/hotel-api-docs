@@ -2364,6 +2364,14 @@
             "default": true,
             "type": "boolean"
           },
+          "logoHorizontalUrl": {
+            "description": "Horizontal (wide) logo URL",
+            "type": "string"
+          },
+          "logoSquareUrl": {
+            "description": "Square (1:1) logo URL",
+            "type": "string"
+          },
           "name": {
             "example": "Moon & Mars Resort",
             "type": "string"
@@ -2390,6 +2398,11 @@
             "example": 50,
             "minimum": 1,
             "type": "number"
+          },
+          "websiteUrl": {
+            "description": "Public website URL",
+            "example": "https://moonmarsresort.com",
+            "type": "string"
           }
         },
         "required": [
@@ -7191,6 +7204,14 @@
             "default": true,
             "type": "boolean"
           },
+          "logoHorizontalUrl": {
+            "description": "Horizontal (wide) logo URL",
+            "type": "string"
+          },
+          "logoSquareUrl": {
+            "description": "Square (1:1) logo URL",
+            "type": "string"
+          },
           "name": {
             "example": "Moon & Mars Resort",
             "type": "string"
@@ -7217,6 +7238,11 @@
             "example": 50,
             "minimum": 1,
             "type": "number"
+          },
+          "websiteUrl": {
+            "description": "Public website URL",
+            "example": "https://moonmarsresort.com",
+            "type": "string"
           }
         },
         "type": "object"
