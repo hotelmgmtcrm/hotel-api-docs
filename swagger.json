@@ -1648,6 +1648,10 @@
             },
             "type": "array"
           },
+          "gstPercentage": {
+            "description": "GST percentage 0-100",
+            "type": "number"
+          },
           "hotelId": {
             "description": "Hotel UUID — defaults to caller's currentHotelId",
             "type": "string"
@@ -6915,6 +6919,9 @@
               "$ref": "#/components/schemas/FunctionDetailDto"
             },
             "type": "array"
+          },
+          "gstPercentage": {
+            "type": "number"
           },
           "lightingSetup": {
             "items": {
