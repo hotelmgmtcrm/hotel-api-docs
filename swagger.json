@@ -5045,6 +5045,13 @@
             "description": "Area UUID — required when locationType is PUBLIC_AREA / GARDEN / etc",
             "type": "string"
           },
+          "areaIds": {
+            "description": "Multiple target area UUIDs",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
           "assignedTo": {
             "description": "User UUID of the technician to assign immediately",
             "type": "string"
@@ -5084,6 +5091,14 @@
           },
           "location": {
             "example": "Room 204, 2nd floor",
+            "type": "string"
+          },
+          "locationKind": {
+            "description": "Which location tab was used: 'room' or 'area'",
+            "enum": [
+              "room",
+              "area"
+            ],
             "type": "string"
           },
           "locationType": {
@@ -5131,6 +5146,13 @@
           "roomId": {
             "description": "Room UUID — required when locationType is ROOM",
             "type": "string"
+          },
+          "roomIds": {
+            "description": "Multiple target room UUIDs",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
           },
           "scheduledDate": {
             "description": "When the work should happen (ISO date-time)",
@@ -23316,6 +23338,13 @@
         "operationId": "MaintenanceController_findAll",
         "parameters": [
           {
+            "description": "Filter tickets assigned to a specific user UUID",
+            "in": "query",
+            "name": "assignedTo",
+            "required": false,
+            "schema": {}
+          },
+          {
             "in": "query",
             "name": "sourceType",
             "required": false,
@@ -30338,6 +30367,14 @@
               "example": "2026-01-31",
               "type": "string"
             }
+          },
+          {
+            "in": "query",
+            "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -31101,6 +31138,33 @@
       }
     },
     "/sales/{id}": {
+      "delete": {
+        "operationId": "SalesController_deleteSale",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Delete a sale",
+        "tags": [
+          "Sales"
+        ]
+      },
       "get": {
         "operationId": "SalesController_findOne",
         "parameters": [
@@ -31124,6 +31188,33 @@
           }
         ],
         "summary": "Get a specific sale",
+        "tags": [
+          "Sales"
+        ]
+      },
+      "patch": {
+        "operationId": "SalesController_updateSale",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update a sale",
         "tags": [
           "Sales"
         ]
