@@ -192,6 +192,10 @@
               "sales",
               "sales_manager",
               "sales_executive",
+              "booking_executive",
+              "event_sales_executive",
+              "business_development_manager",
+              "director_of_sales",
               "floor_supervisor",
               "open_area_supervisor",
               "hk_manager",
@@ -353,6 +357,10 @@
               "sales",
               "sales_manager",
               "sales_executive",
+              "booking_executive",
+              "event_sales_executive",
+              "business_development_manager",
+              "director_of_sales",
               "floor_supervisor",
               "open_area_supervisor",
               "hk_manager",
@@ -1179,7 +1187,20 @@
             "description": "Specific area UUID — leave empty for hotel-wide templates",
             "type": "string"
           },
+          "blockId": {
+            "description": "Target block/building UUID (scopeLevel=block)",
+            "type": "string"
+          },
+          "department": {
+            "description": "Owning department",
+            "example": "Housekeeping",
+            "type": "string"
+          },
           "description": {
+            "type": "string"
+          },
+          "floorId": {
+            "description": "Target floor UUID (scopeLevel=floor)",
             "type": "string"
           },
           "hotelId": {
@@ -1190,18 +1211,48 @@
             "default": true,
             "type": "boolean"
           },
+          "mandatory": {
+            "default": false,
+            "description": "Must be completed before the task can close",
+            "type": "boolean"
+          },
+          "roomId": {
+            "description": "Target room UUID (scopeLevel=room)",
+            "type": "string"
+          },
+          "roomType": {
+            "description": "Room type, e.g. Deluxe (scopeLevel=room_type)",
+            "type": "string"
+          },
+          "scopeLevel": {
+            "description": "Location scope level",
+            "enum": [
+              "hotel",
+              "block",
+              "floor",
+              "area",
+              "room_type",
+              "room"
+            ],
+            "type": "string"
+          },
+          "sequence": {
+            "default": 0,
+            "description": "Order within the checklist",
+            "type": "number"
+          },
           "title": {
             "description": "Checklist title / item description",
             "example": "Beds made with fresh linen",
             "type": "string"
           },
           "unit": {
-            "description": "Unit/group within the area",
+            "description": "Unit/section within the checklist",
+            "example": "Bathroom",
             "type": "string"
           }
         },
         "required": [
-          "area",
           "title"
         ],
         "type": "object"
@@ -5371,6 +5422,10 @@
               "sales",
               "sales_manager",
               "sales_executive",
+              "booking_executive",
+              "event_sales_executive",
+              "business_development_manager",
+              "director_of_sales",
               "floor_supervisor",
               "open_area_supervisor",
               "hk_manager",
@@ -5895,6 +5950,10 @@
               "sales",
               "sales_manager",
               "sales_executive",
+              "booking_executive",
+              "event_sales_executive",
+              "business_development_manager",
+              "director_of_sales",
               "floor_supervisor",
               "open_area_supervisor",
               "hk_manager",
@@ -6520,11 +6579,35 @@
           "areaId": {
             "type": "string"
           },
+          "blockId": {
+            "type": "string"
+          },
+          "department": {
+            "type": "string"
+          },
           "description": {
+            "type": "string"
+          },
+          "floorId": {
             "type": "string"
           },
           "isActive": {
             "type": "boolean"
+          },
+          "mandatory": {
+            "type": "boolean"
+          },
+          "roomId": {
+            "type": "string"
+          },
+          "roomType": {
+            "type": "string"
+          },
+          "scopeLevel": {
+            "type": "string"
+          },
+          "sequence": {
+            "type": "number"
           },
           "title": {
             "type": "string"
@@ -8490,6 +8573,10 @@
               "sales",
               "sales_manager",
               "sales_executive",
+              "booking_executive",
+              "event_sales_executive",
+              "business_development_manager",
+              "director_of_sales",
               "floor_supervisor",
               "open_area_supervisor",
               "hk_manager",
@@ -11289,6 +11376,14 @@
           },
           {
             "in": "query",
+            "name": "department",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
             "name": "page",
             "required": false,
             "schema": {
@@ -11383,6 +11478,91 @@
           }
         ],
         "summary": "Bulk import checklist items for a specific area",
+        "tags": [
+          "Property Management - Checklist"
+        ]
+      }
+    },
+    "/checklist-templates/departments": {
+      "get": {
+        "operationId": "ChecklistController_getDepartments",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get all distinct checklist departments",
+        "tags": [
+          "Property Management - Checklist"
+        ]
+      }
+    },
+    "/checklist-templates/prepared-lists": {
+      "get": {
+        "operationId": "ChecklistController_getPreparedLists",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List ready-made checklist CSVs available in storage",
+        "tags": [
+          "Property Management - Checklist"
+        ]
+      }
+    },
+    "/checklist-templates/resolve": {
+      "get": {
+        "operationId": "ChecklistController_resolve",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "department",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "roomId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "areaId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Resolve the effective checklist for a room/area (inheritance + sequence)",
         "tags": [
           "Property Management - Checklist"
         ]
@@ -13652,6 +13832,42 @@
                 "lost",
                 "converted"
               ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Enquiry date range start (YYYY-MM-DD)",
+            "in": "query",
+            "name": "enquiryDateFrom",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Enquiry date range end (YYYY-MM-DD)",
+            "in": "query",
+            "name": "enquiryDateTo",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Function date range start (YYYY-MM-DD)",
+            "in": "query",
+            "name": "functionDateFrom",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Function date range end (YYYY-MM-DD)",
+            "in": "query",
+            "name": "functionDateTo",
+            "required": false,
+            "schema": {
               "type": "string"
             }
           },
