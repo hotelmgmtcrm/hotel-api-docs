@@ -4101,6 +4101,10 @@
             ],
             "type": "string"
           },
+          "shiftId": {
+            "description": "Optional shift-template UUID (hr.shifts.id). When set, the row inherits the template's start/end times and department.",
+            "type": "string"
+          },
           "staffId": {
             "description": "Staff user UUID",
             "type": "string"
@@ -4447,6 +4451,10 @@
           "endTime": {
             "description": "End time (HH:MM, 24-hour)",
             "example": "14:00",
+            "type": "string"
+          },
+          "hotelId": {
+            "description": "Scoping hotel for the shift template",
             "type": "string"
           },
           "name": {
@@ -7995,6 +8003,10 @@
               "off",
               "leave"
             ],
+            "type": "string"
+          },
+          "shiftId": {
+            "description": "Optional shift-template UUID (hr.shifts.id). When set, the row inherits the template's start/end times and department.",
             "type": "string"
           },
           "staffId": {
