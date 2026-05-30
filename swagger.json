@@ -681,38 +681,6 @@
         ],
         "type": "object"
       },
-      "CreateAttendanceDto": {
-        "properties": {
-          "date": {
-            "description": "Date of attendance (YYYY-MM-DD)",
-            "example": "2026-05-08",
-            "type": "string"
-          },
-          "remarks": {
-            "description": "Free-text remarks",
-            "type": "string"
-          },
-          "staffId": {
-            "description": "Staff UUID",
-            "type": "string"
-          },
-          "status": {
-            "enum": [
-              "present",
-              "absent",
-              "half_day",
-              "leave",
-              "wfh"
-            ],
-            "type": "string"
-          }
-        },
-        "required": [
-          "staffId",
-          "date"
-        ],
-        "type": "object"
-      },
       "CreateBanquetBookingDto": {
         "properties": {
           "address": {
@@ -2986,45 +2954,6 @@
         },
         "required": [
           "name"
-        ],
-        "type": "object"
-      },
-      "CreateLeaveDto": {
-        "properties": {
-          "endDate": {
-            "example": "2026-05-17",
-            "type": "string"
-          },
-          "leaveType": {
-            "description": "Type of leave",
-            "enum": [
-              "casual",
-              "sick",
-              "earned",
-              "maternity",
-              "paternity",
-              "unpaid"
-            ],
-            "type": "string"
-          },
-          "reason": {
-            "description": "Reason for leave",
-            "type": "string"
-          },
-          "staffId": {
-            "description": "Staff UUID requesting leave",
-            "type": "string"
-          },
-          "startDate": {
-            "example": "2026-05-15",
-            "type": "string"
-          }
-        },
-        "required": [
-          "staffId",
-          "leaveType",
-          "startDate",
-          "endDate"
         ],
         "type": "object"
       },
@@ -7584,6 +7513,39 @@
             "type": "string"
           },
           "venue": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "UpdateLeaveDto": {
+        "properties": {
+          "endDate": {
+            "example": "2026-05-17",
+            "type": "string"
+          },
+          "leaveType": {
+            "description": "Type of leave",
+            "enum": [
+              "casual",
+              "sick",
+              "earned",
+              "maternity",
+              "paternity",
+              "unpaid"
+            ],
+            "type": "string"
+          },
+          "reason": {
+            "description": "Reason for leave",
+            "type": "string"
+          },
+          "staffId": {
+            "description": "Staff UUID requesting leave",
+            "type": "string"
+          },
+          "startDate": {
+            "example": "2026-05-15",
             "type": "string"
           }
         },
@@ -18384,16 +18346,6 @@
       "post": {
         "operationId": "AttendanceController_mark",
         "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateAttendanceDto"
-              }
-            }
-          },
-          "required": true
-        },
         "responses": {
           "201": {
             "description": ""
@@ -18404,6 +18356,112 @@
             "bearer": []
           }
         ],
+        "summary": "Mark a single staff member present/late/absent for a date (creates the row + check-in stamp).",
+        "tags": [
+          "HR - Attendance"
+        ]
+      }
+    },
+    "/hr/attendance/bulk": {
+      "post": {
+        "operationId": "AttendanceController_bulkMark",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Mark many staff at once for a date. Skips any already marked.",
+        "tags": [
+          "HR - Attendance"
+        ]
+      }
+    },
+    "/hr/attendance/staff/{staffId}": {
+      "get": {
+        "operationId": "AttendanceController_staffHistory",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "staffId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "YYYY-MM-DD",
+            "in": "query",
+            "name": "from",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "YYYY-MM-DD",
+            "in": "query",
+            "name": "to",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Per-staff attendance history with worked minutes per day.",
+        "tags": [
+          "HR - Attendance"
+        ]
+      }
+    },
+    "/hr/attendance/summary": {
+      "get": {
+        "operationId": "AttendanceController_summary",
+        "parameters": [
+          {
+            "description": "YYYY-MM-DD",
+            "in": "query",
+            "name": "date",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Daily roster-aware counts: onShift / present / late / absent / leave / notMarked.",
         "tags": [
           "HR - Attendance"
         ]
@@ -18432,7 +18490,63 @@
             "bearer": []
           }
         ],
-        "summary": "Update attendance (checkout, status, remarks)",
+        "summary": "(Legacy) Update attendance — same as PUT; kept for back-compat.",
+        "tags": [
+          "HR - Attendance"
+        ]
+      },
+      "put": {
+        "operationId": "AttendanceController_edit",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Edit an attendance row. Lets HR fix checkIn / checkOut / status / remarks. Re-classifies late on checkIn move.",
+        "tags": [
+          "HR - Attendance"
+        ]
+      }
+    },
+    "/hr/attendance/{id}/check-out": {
+      "post": {
+        "operationId": "AttendanceController_checkOut",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Record check-out for an existing attendance row. Optional `checkOut` timestamp lets HR fix missed punches.",
         "tags": [
           "HR - Attendance"
         ]
@@ -18796,6 +18910,24 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "YYYY-MM-DD — intersects window",
+            "in": "query",
+            "name": "from",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "YYYY-MM-DD — intersects window",
+            "in": "query",
+            "name": "to",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -18816,16 +18948,6 @@
       "post": {
         "operationId": "LeaveController_apply",
         "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateLeaveDto"
-              }
-            }
-          },
-          "required": true
-        },
         "responses": {
           "201": {
             "description": ""
@@ -18836,6 +18958,109 @@
             "bearer": []
           }
         ],
+        "tags": [
+          "HR - Leave"
+        ]
+      }
+    },
+    "/hr/leave/balance/{staffId}": {
+      "get": {
+        "operationId": "LeaveController_balance",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "staffId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "year",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Per-staff annual leave usage rollup. Days taken per type + status totals.",
+        "tags": [
+          "HR - Leave"
+        ]
+      }
+    },
+    "/hr/leave/{id}": {
+      "delete": {
+        "operationId": "LeaveController_remove",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Cancel / remove a leave. If it was approved, unwinds the roster + attendance side-effects.",
+        "tags": [
+          "HR - Leave"
+        ]
+      },
+      "put": {
+        "operationId": "LeaveController_update",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateLeaveDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Edit a pending leave (HR / GM). Approved/rejected leaves are immutable.",
         "tags": [
           "HR - Leave"
         ]
