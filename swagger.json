@@ -8643,6 +8643,175 @@
         ]
       }
     },
+    "/admin/recycle-bin/summary": {
+      "get": {
+        "operationId": "RecycleBinController_summary",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Per-type counts of soft-deleted rows",
+        "tags": [
+          "Recycle Bin (Developer)"
+        ]
+      }
+    },
+    "/admin/recycle-bin/{type}": {
+      "get": {
+        "operationId": "RecycleBinController_list",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "type",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List soft-deleted rows of one entity type",
+        "tags": [
+          "Recycle Bin (Developer)"
+        ]
+      }
+    },
+    "/admin/recycle-bin/{type}/{id}/purge": {
+      "delete": {
+        "operationId": "RecycleBinController_purge",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "type",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Room only — NULL the room ref on bookings instead of refusing.",
+            "in": "query",
+            "name": "force",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Permanently delete a soft-deleted row (cascades for rooms)",
+        "tags": [
+          "Recycle Bin (Developer)"
+        ]
+      }
+    },
+    "/admin/recycle-bin/{type}/{id}/purge-preview": {
+      "get": {
+        "operationId": "RecycleBinController_purgePreview",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "type",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Dry-run preview — counts cascade children (rooms) and blocking children (every other type)",
+        "tags": [
+          "Recycle Bin (Developer)"
+        ]
+      }
+    },
+    "/admin/recycle-bin/{type}/{id}/restore": {
+      "post": {
+        "operationId": "RecycleBinController_restore",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "type",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Restore a soft-deleted row (flip isActive back to true)",
+        "tags": [
+          "Recycle Bin (Developer)"
+        ]
+      }
+    },
     "/areas": {
       "get": {
         "operationId": "AreasController_findAllAreas",
@@ -28503,6 +28672,26 @@
         ]
       }
     },
+    "/rooms/deleted": {
+      "get": {
+        "operationId": "RoomsController_findDeletedRooms",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List soft-deleted rooms across every hotel (developer admin)",
+        "tags": [
+          "Rooms"
+        ]
+      }
+    },
     "/rooms/{id}": {
       "delete": {
         "operationId": "RoomsController_remove",
@@ -28564,6 +28753,73 @@
           }
         ],
         "summary": "Update room",
+        "tags": [
+          "Rooms"
+        ]
+      }
+    },
+    "/rooms/{id}/purge": {
+      "delete": {
+        "operationId": "RoomsController_purgeRoom",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "NULL the room reference on existing bookings instead of refusing the delete.",
+            "in": "query",
+            "name": "force",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Permanently delete a soft-deleted room and its operational child rows",
+        "tags": [
+          "Rooms"
+        ]
+      }
+    },
+    "/rooms/{id}/purge-preview": {
+      "get": {
+        "operationId": "RoomsController_previewPurge",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Dry-run: count what would be deleted / cleared if this room is purged",
         "tags": [
           "Rooms"
         ]
