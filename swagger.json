@@ -14034,6 +14034,20 @@
               ],
               "type": "string"
             }
+          },
+          {
+            "in": "query",
+            "name": "kind",
+            "required": false,
+            "schema": {
+              "default": "enquiry",
+              "enum": [
+                "enquiry",
+                "booked",
+                "all"
+              ],
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -14213,6 +14227,35 @@
             "bearer": []
           }
         ],
+        "tags": [
+          "Enquiry"
+        ]
+      }
+    },
+    "/enquiries/{id}/duplicate-as-booked": {
+      "post": {
+        "operationId": "EnquiryController_duplicateAsBooked",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Create a booked copy of an enquiry. Source row is untouched; the new row has kind=booked + status=booked + sourceEnquiryId pointing back.",
         "tags": [
           "Enquiry"
         ]
