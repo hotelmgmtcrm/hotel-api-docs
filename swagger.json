@@ -5527,6 +5527,12 @@
           "date": {
             "type": "string"
           },
+          "dateTentative": {
+            "type": "string"
+          },
+          "dateType": {
+            "type": "string"
+          },
           "foodLines": {
             "items": {
               "$ref": "#/components/schemas/FoodLineDto"
@@ -14060,6 +14066,15 @@
                 "booked",
                 "all"
               ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Limit results to enquiries created by the current user",
+            "in": "query",
+            "name": "mine",
+            "required": false,
+            "schema": {
               "type": "string"
             }
           }
