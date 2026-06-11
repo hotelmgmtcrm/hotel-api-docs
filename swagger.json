@@ -815,6 +815,75 @@
         ],
         "type": "object"
       },
+      "CreateBanquetMenuDto": {
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "dessertOptions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "extras": {
+            "description": "ExtraItem[]",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "minGuarantee": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "nonvegAdditional": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "notes": {
+            "description": "string[]",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "packages": {
+            "description": "MenuPackage[]",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "terms": {
+            "description": "string[]",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "timing": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "wedding",
+              "corporate",
+              "birthday",
+              "extras"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "type": "object"
+      },
       "CreateBarInventoryDto": {
         "properties": {
           "category": {
@@ -1673,6 +1742,14 @@
           },
           "hotelId": {
             "description": "Hotel UUID — defaults to caller's currentHotelId",
+            "type": "string"
+          },
+          "kind": {
+            "default": "enquiry",
+            "enum": [
+              "enquiry",
+              "booked"
+            ],
             "type": "string"
           },
           "lightingSetup": {
@@ -5958,6 +6035,21 @@
         },
         "type": "object"
       },
+      "ReplaceAllMenusDto": {
+        "properties": {
+          "menus": {
+            "description": "Full list of menus to set for this hotel — replaces all existing rows",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "menus"
+        ],
+        "type": "object"
+      },
       "RequisitionItemDto": {
         "properties": {
           "itemId": {
@@ -6399,6 +6491,72 @@
               "active",
               "maintenance",
               "disposed"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "UpdateBanquetMenuDto": {
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "dessertOptions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "extras": {
+            "description": "ExtraItem[]",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "minGuarantee": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "nonvegAdditional": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "notes": {
+            "description": "string[]",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "packages": {
+            "description": "MenuPackage[]",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "terms": {
+            "description": "string[]",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "timing": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "wedding",
+              "corporate",
+              "birthday",
+              "extras"
             ],
             "type": "string"
           }
@@ -9478,6 +9636,174 @@
         "summary": "Register a new user",
         "tags": [
           "Auth"
+        ]
+      }
+    },
+    "/banquet-menus": {
+      "get": {
+        "operationId": "BanquetMenusController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List banquet menus for the current hotel",
+        "tags": [
+          "Banquet Menus"
+        ]
+      },
+      "post": {
+        "operationId": "BanquetMenusController_create",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBanquetMenuDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Create a banquet menu card",
+        "tags": [
+          "Banquet Menus"
+        ]
+      }
+    },
+    "/banquet-menus/replace-all": {
+      "put": {
+        "operationId": "BanquetMenusController_replaceAll",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReplaceAllMenusDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Replace this hotel's entire menu set in one call",
+        "tags": [
+          "Banquet Menus"
+        ]
+      }
+    },
+    "/banquet-menus/{id}": {
+      "delete": {
+        "operationId": "BanquetMenusController_remove",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Banquet Menus"
+        ]
+      },
+      "get": {
+        "operationId": "BanquetMenusController_findOne",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Banquet Menus"
+        ]
+      },
+      "patch": {
+        "operationId": "BanquetMenusController_update",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBanquetMenuDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Banquet Menus"
         ]
       }
     },
