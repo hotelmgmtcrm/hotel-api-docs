@@ -5135,9 +5135,23 @@
             "description": "User UUID of the technician to assign immediately",
             "type": "string"
           },
+          "assignedToIds": {
+            "description": "Multiple assignee user UUIDs",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
           "assignedToName": {
             "description": "Display name (cached) of the assignee",
             "type": "string"
+          },
+          "assignedToNames": {
+            "description": "Cached display names matching assignedToIds",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
           },
           "category": {
             "enum": [
@@ -5153,6 +5167,13 @@
           "department": {
             "example": "Maintenance & Engineering",
             "type": "string"
+          },
+          "departments": {
+            "description": "Multiple departments — names",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
           },
           "description": {
             "description": "Detailed problem description",
