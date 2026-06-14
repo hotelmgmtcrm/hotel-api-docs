@@ -1607,6 +1607,10 @@
             "example": "MGR-MAINT",
             "type": "string"
           },
+          "departmentId": {
+            "description": "Parent department UUID — leave empty if cross-department",
+            "type": "string"
+          },
           "description": {
             "type": "string"
           },
@@ -7050,6 +7054,10 @@
         "properties": {
           "code": {
             "example": "MGR-MAINT",
+            "type": "string"
+          },
+          "departmentId": {
+            "description": "Parent department UUID — leave empty if cross-department",
             "type": "string"
           },
           "description": {
@@ -13719,6 +13727,14 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "departmentId",
             "required": true,
             "schema": {
               "type": "string"
