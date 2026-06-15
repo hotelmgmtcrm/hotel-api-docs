@@ -5624,6 +5624,21 @@
         ],
         "type": "object"
       },
+      "ForwardEnquiryDto": {
+        "properties": {
+          "recipientIds": {
+            "description": "UUIDs of Sales-dept users to forward the enquiry to. One independent copy is created per recipient.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "recipientIds"
+        ],
+        "type": "object"
+      },
       "FunctionDetailDto": {
         "properties": {
           "date": {
@@ -14665,6 +14680,45 @@
           }
         ],
         "summary": "Create a booked copy of an enquiry. Source row is untouched; the new row has kind=booked + status=booked + sourceEnquiryId pointing back.",
+        "tags": [
+          "Enquiry"
+        ]
+      }
+    },
+    "/enquiries/{id}/forward": {
+      "post": {
+        "operationId": "EnquiryController_forward",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForwardEnquiryDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Forward an enquiry to one or more Sales-dept colleagues. Creates an independent copy per recipient that they own and can edit/delete.",
         "tags": [
           "Enquiry"
         ]
