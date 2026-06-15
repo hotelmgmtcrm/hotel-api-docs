@@ -7129,6 +7129,10 @@
           "complimentaryRooms": {
             "type": "number"
           },
+          "creatorNames": {
+            "description": "Server-attached; client-supplied values are ignored",
+            "type": "object"
+          },
           "customerName": {
             "type": "string"
           },
@@ -7172,6 +7176,22 @@
             },
             "type": "array"
           },
+          "forwardCount": {
+            "description": "Server-attached; client-supplied values are ignored",
+            "type": "number"
+          },
+          "forwardedAt": {
+            "description": "Server-managed; client-supplied values are ignored",
+            "type": "object"
+          },
+          "forwardedById": {
+            "description": "Server-managed; client-supplied values are ignored",
+            "type": "object"
+          },
+          "forwardedFromId": {
+            "description": "Server-managed; client-supplied values are ignored",
+            "type": "object"
+          },
           "functionDate": {
             "type": "string"
           },
@@ -7213,6 +7233,10 @@
           },
           "nextFollowupDate": {
             "type": "string"
+          },
+          "originalCreatedBy": {
+            "description": "Server-attached; client-supplied values are ignored",
+            "type": "object"
           },
           "paymentMode": {
             "type": "string"
