@@ -9602,6 +9602,21 @@
         ]
       }
     },
+    "/auth/forgot-password": {
+      "post": {
+        "operationId": "AuthController_forgotPassword",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Initiate password reset",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
     "/auth/login": {
       "post": {
         "operationId": "AuthController_login",
@@ -9702,6 +9717,21 @@
           }
         },
         "summary": "Register a new user",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/auth/reset-password": {
+      "post": {
+        "operationId": "AuthController_resetPassword",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Reset password with token",
         "tags": [
           "Auth"
         ]
@@ -24717,6 +24747,7 @@
     },
     "/maintenance/tickets/{id}/assign": {
       "put": {
+        "description": "Body accepts EITHER the legacy single-string shape `{ assignedTo }` OR the multi shape `{ assignedToIds: string[], assignedToNames?: string[], departments?: string[] }`. The service normalises both.",
         "operationId": "MaintenanceController_assign",
         "parameters": [
           {
@@ -24738,7 +24769,7 @@
             "bearer": []
           }
         ],
-        "summary": "Assign a technician to a ticket",
+        "summary": "Assign one or more technicians (and departments) to a ticket",
         "tags": [
           "Maintenance"
         ]
