@@ -5188,6 +5188,20 @@
             "description": "Hotel UUID — defaults to caller's currentHotelId",
             "type": "string"
           },
+          "inspectorIds": {
+            "description": "Inspector user UUIDs — verify the work once it is complete",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "inspectorNames": {
+            "description": "Cached display names matching inspectorIds",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
           "itemsDescription": {
             "description": "Items / parts likely needed (free text)",
             "example": "AC filter, refrigerant top-up",
@@ -23525,6 +23539,41 @@
           }
         ],
         "summary": "Submit an inspection report for a ticket",
+        "tags": [
+          "Maintenance"
+        ]
+      }
+    },
+    "/maintenance/inspections/awaiting": {
+      "get": {
+        "description": "Pass `inspectorId` to scope to the calling inspector's queue. Without it, returns every awaiting inspection in the hotel (manager view).",
+        "operationId": "MaintenanceController_getAwaitingInspections",
+        "parameters": [
+          {
+            "description": "Filter to one inspector's assignments",
+            "in": "query",
+            "name": "inspectorId",
+            "required": false,
+            "schema": {}
+          },
+          {
+            "in": "query",
+            "name": "hotelId",
+            "required": false,
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Tickets with inspectors assigned that have no completed inspection yet",
         "tags": [
           "Maintenance"
         ]
