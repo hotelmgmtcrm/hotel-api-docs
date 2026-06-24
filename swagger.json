@@ -29869,6 +29869,69 @@
         ]
       }
     },
+    "/rosters/exclusions": {
+      "delete": {
+        "operationId": "RostersController_removeExclusion",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "department",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "weekStart",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "staffId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Un-hide a staff from the duty-roster view",
+        "tags": [
+          "Rosters"
+        ]
+      },
+      "post": {
+        "operationId": "RostersController_addExclusion",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Hide a staff from the duty-roster view for a (hotel, dept, week)",
+        "tags": [
+          "Rosters"
+        ]
+      }
+    },
     "/rosters/on-shift": {
       "get": {
         "operationId": "RostersController_getOnShift",
