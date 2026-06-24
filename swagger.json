@@ -7150,6 +7150,18 @@
           "customerName": {
             "type": "string"
           },
+          "deletedAt": {
+            "description": "Server-managed; client-supplied values are ignored",
+            "type": "object"
+          },
+          "deletedBy": {
+            "description": "Server-managed; client-supplied values are ignored",
+            "type": "object"
+          },
+          "deletedByName": {
+            "description": "Server-managed; client-supplied values are ignored",
+            "type": "object"
+          },
           "discountAmount": {
             "type": "number"
           },
@@ -7220,6 +7232,10 @@
           },
           "gstPercentage": {
             "type": "number"
+          },
+          "isActive": {
+            "description": "Server-managed; client-supplied values are ignored",
+            "type": "object"
           },
           "lightingSetup": {
             "items": {
