@@ -11738,6 +11738,34 @@
       }
     },
     "/bookings/{id}": {
+      "delete": {
+        "description": "Distinct from cancel: cancellation keeps the row visible with status=CANCELLED, this removes it from the bookings list entirely. Cannot delete a checked-in booking — checkout or cancel first.",
+        "operationId": "BookingsController_remove",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Soft-delete a booking (moves to /admin/recycle-bin)",
+        "tags": [
+          "Bookings"
+        ]
+      },
       "get": {
         "operationId": "BookingsController_findOne",
         "parameters": [
@@ -30614,7 +30642,7 @@
             "bearer": []
           }
         ],
-        "summary": "Delete a travel agency",
+        "summary": "Soft-delete a travel agency (moves to Recycle Bin)",
         "tags": [
           "Sales"
         ]
@@ -31650,7 +31678,7 @@
             "bearer": []
           }
         ],
-        "summary": "Delete a sales plan (GM/Admin/SuperAdmin only)",
+        "summary": "Soft-delete a sales plan — Recycle Bin (GM/Admin/SuperAdmin)",
         "tags": [
           "Sales"
         ]
@@ -32315,7 +32343,7 @@
             "bearer": []
           }
         ],
-        "summary": "Delete a sales target (GM/Admin/SuperAdmin only)",
+        "summary": "Soft-delete a sales target — Recycle Bin (GM/Admin/SuperAdmin)",
         "tags": [
           "Sales"
         ]
@@ -32628,7 +32656,7 @@
             "bearer": []
           }
         ],
-        "summary": "Delete a sale",
+        "summary": "Soft-delete a sale (moves to Recycle Bin)",
         "tags": [
           "Sales"
         ]
