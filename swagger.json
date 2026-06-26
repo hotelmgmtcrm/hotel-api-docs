@@ -13493,6 +13493,35 @@
         ]
       }
     },
+    "/customers/by-phone/{phone}/history": {
+      "get": {
+        "operationId": "CustomersController_getHistoryByPhone",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "phone",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get customer history by phone",
+        "tags": [
+          "Customers"
+        ]
+      }
+    },
     "/customers/{id}": {
       "put": {
         "operationId": "CustomersController_update",
@@ -25096,6 +25125,34 @@
           }
         ],
         "summary": "Add a marketing media record via external URL",
+        "tags": [
+          "Marketing Media"
+        ]
+      }
+    },
+    "/marketing/activity-summary": {
+      "get": {
+        "operationId": "MarketingController_getActivitySummary",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "hotelId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "tags": [
           "Marketing Media"
         ]
