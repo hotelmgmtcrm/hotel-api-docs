@@ -1651,6 +1651,12 @@
             },
             "type": "array"
           },
+          "beoData": {
+            "type": "object"
+          },
+          "beoEnabled": {
+            "type": "boolean"
+          },
           "bookingConfirmStatus": {
             "enum": [
               "confirmed",
@@ -7123,6 +7129,12 @@
               "type": "array"
             },
             "type": "array"
+          },
+          "beoData": {
+            "type": "object"
+          },
+          "beoEnabled": {
+            "type": "boolean"
           },
           "bookingConfirmStatus": {
             "enum": [
