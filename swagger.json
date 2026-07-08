@@ -1816,6 +1816,9 @@
           "receiptNote": {
             "type": "string"
           },
+          "referenceNumber": {
+            "type": "string"
+          },
           "remarks": {
             "type": "string"
           },
@@ -2991,6 +2994,9 @@
             "type": "string"
           },
           "phone": {
+            "type": "string"
+          },
+          "referenceNumber": {
             "type": "string"
           },
           "sector": {
@@ -7292,6 +7298,9 @@
           "receiptNote": {
             "type": "string"
           },
+          "referenceNumber": {
+            "type": "string"
+          },
           "remarks": {
             "type": "string"
           },
@@ -7739,6 +7748,9 @@
             "type": "string"
           },
           "phone": {
+            "type": "string"
+          },
+          "referenceNumber": {
             "type": "string"
           },
           "remark": {
