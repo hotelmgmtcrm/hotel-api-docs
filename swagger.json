@@ -211,7 +211,21 @@
               "developer",
               "electrician",
               "maintenance_manager",
-              "maintenance_supervisor"
+              "maintenance_supervisor",
+              "security_guard",
+              "restaurant_manager",
+              "it_manager",
+              "front_office_executive",
+              "fb_manager",
+              "executive_chef",
+              "duty_manager",
+              "concierge",
+              "bellboy",
+              "adviser",
+              "accounts_cashier",
+              "maintenance_staff",
+              "restaurant_attendant",
+              "pool_attendant"
             ],
             "type": "string"
           }
@@ -376,7 +390,21 @@
               "developer",
               "electrician",
               "maintenance_manager",
-              "maintenance_supervisor"
+              "maintenance_supervisor",
+              "security_guard",
+              "restaurant_manager",
+              "it_manager",
+              "front_office_executive",
+              "fb_manager",
+              "executive_chef",
+              "duty_manager",
+              "concierge",
+              "bellboy",
+              "adviser",
+              "accounts_cashier",
+              "maintenance_staff",
+              "restaurant_attendant",
+              "pool_attendant"
             ],
             "example": "maintenance_manager",
             "type": "string"
@@ -5520,7 +5548,21 @@
               "developer",
               "electrician",
               "maintenance_manager",
-              "maintenance_supervisor"
+              "maintenance_supervisor",
+              "security_guard",
+              "restaurant_manager",
+              "it_manager",
+              "front_office_executive",
+              "fb_manager",
+              "executive_chef",
+              "duty_manager",
+              "concierge",
+              "bellboy",
+              "adviser",
+              "accounts_cashier",
+              "maintenance_staff",
+              "restaurant_attendant",
+              "pool_attendant"
             ],
             "type": "string"
           },
@@ -6069,7 +6111,21 @@
               "developer",
               "electrician",
               "maintenance_manager",
-              "maintenance_supervisor"
+              "maintenance_supervisor",
+              "security_guard",
+              "restaurant_manager",
+              "it_manager",
+              "front_office_executive",
+              "fb_manager",
+              "executive_chef",
+              "duty_manager",
+              "concierge",
+              "bellboy",
+              "adviser",
+              "accounts_cashier",
+              "maintenance_staff",
+              "restaurant_attendant",
+              "pool_attendant"
             ],
             "type": "string"
           }
@@ -8866,7 +8922,21 @@
               "developer",
               "electrician",
               "maintenance_manager",
-              "maintenance_supervisor"
+              "maintenance_supervisor",
+              "security_guard",
+              "restaurant_manager",
+              "it_manager",
+              "front_office_executive",
+              "fb_manager",
+              "executive_chef",
+              "duty_manager",
+              "concierge",
+              "bellboy",
+              "adviser",
+              "accounts_cashier",
+              "maintenance_staff",
+              "restaurant_attendant",
+              "pool_attendant"
             ],
             "type": "string"
           }
