@@ -1241,6 +1241,53 @@
         },
         "type": "object"
       },
+      "CreateChecklistRuleDto": {
+        "properties": {
+          "area": {
+            "type": "string"
+          },
+          "blockId": {
+            "type": "string"
+          },
+          "department": {
+            "type": "string"
+          },
+          "description": {
+            "description": "Optional description of the checklist rule",
+            "type": "string"
+          },
+          "floorId": {
+            "type": "string"
+          },
+          "hotelId": {
+            "description": "Hotel UUID",
+            "type": "string"
+          },
+          "isActive": {
+            "default": true,
+            "type": "boolean"
+          },
+          "name": {
+            "description": "Name of the checklist rule",
+            "example": "Room Cleaning",
+            "type": "string"
+          },
+          "roomId": {
+            "type": "string"
+          },
+          "roomType": {
+            "type": "string"
+          },
+          "scopeLevel": {
+            "default": "hotel",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "type": "object"
+      },
       "CreateChecklistTemplateDto": {
         "properties": {
           "area": {
@@ -1287,6 +1334,10 @@
           },
           "roomType": {
             "description": "Room type, e.g. Deluxe (scopeLevel=room_type)",
+            "type": "string"
+          },
+          "ruleId": {
+            "description": "Checklist rule UUID",
             "type": "string"
           },
           "scopeLevel": {
@@ -6808,6 +6859,41 @@
         },
         "type": "object"
       },
+      "UpdateChecklistRuleDto": {
+        "properties": {
+          "area": {
+            "type": "string"
+          },
+          "blockId": {
+            "type": "string"
+          },
+          "department": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "floorId": {
+            "type": "string"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          },
+          "roomId": {
+            "type": "string"
+          },
+          "roomType": {
+            "type": "string"
+          },
+          "scopeLevel": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "UpdateChecklistTemplateDto": {
         "properties": {
           "area": {
@@ -6838,6 +6924,9 @@
             "type": "string"
           },
           "roomType": {
+            "type": "string"
+          },
+          "ruleId": {
             "type": "string"
           },
           "scopeLevel": {
@@ -12101,6 +12190,201 @@
         ]
       }
     },
+    "/checklist-rules": {
+      "get": {
+        "operationId": "ChecklistRuleController_findAll",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "department",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "scopeLevel",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "blockId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "floorId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "roomId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "roomType",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "area",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get checklist rules for current hotel (filtered department/location wise)",
+        "tags": [
+          "Property Management - Checklist Rules"
+        ]
+      },
+      "post": {
+        "operationId": "ChecklistRuleController_create",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateChecklistRuleDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Create a new checklist rule",
+        "tags": [
+          "Property Management - Checklist Rules"
+        ]
+      }
+    },
+    "/checklist-rules/{id}": {
+      "delete": {
+        "operationId": "ChecklistRuleController_remove",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Property Management - Checklist Rules"
+        ]
+      },
+      "get": {
+        "operationId": "ChecklistRuleController_findOne",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Property Management - Checklist Rules"
+        ]
+      },
+      "patch": {
+        "operationId": "ChecklistRuleController_update",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateChecklistRuleDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Property Management - Checklist Rules"
+        ]
+      }
+    },
     "/checklist-templates": {
       "get": {
         "operationId": "ChecklistController_findAll",
@@ -12135,6 +12419,14 @@
             "required": false,
             "schema": {
               "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "ruleId",
+            "required": false,
+            "schema": {
+              "type": "string"
             }
           }
         ],
@@ -12285,6 +12577,14 @@
           {
             "in": "query",
             "name": "areaId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "ruleId",
             "required": false,
             "schema": {
               "type": "string"
