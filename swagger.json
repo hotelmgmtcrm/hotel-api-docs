@@ -1429,6 +1429,23 @@
             "example": "AC not cooling",
             "type": "string"
           },
+          "targetDepartment": {
+            "type": "string"
+          },
+          "targetGuestId": {
+            "type": "string"
+          },
+          "targetType": {
+            "enum": [
+              "guest",
+              "department",
+              "user"
+            ],
+            "type": "string"
+          },
+          "targetUserId": {
+            "type": "string"
+          },
           "title": {
             "description": "Alias for subject (frontend compat)",
             "type": "string"
@@ -5377,6 +5394,23 @@
             ],
             "type": "string"
           },
+          "targetDepartment": {
+            "type": "string"
+          },
+          "targetGuestId": {
+            "type": "string"
+          },
+          "targetType": {
+            "enum": [
+              "guest",
+              "department",
+              "user"
+            ],
+            "type": "string"
+          },
+          "targetUserId": {
+            "type": "string"
+          },
           "title": {
             "description": "Short title of the work order",
             "example": "AC unit not cooling in Room 204",
@@ -7028,6 +7062,23 @@
           },
           "subject": {
             "example": "AC not cooling",
+            "type": "string"
+          },
+          "targetDepartment": {
+            "type": "string"
+          },
+          "targetGuestId": {
+            "type": "string"
+          },
+          "targetType": {
+            "enum": [
+              "guest",
+              "department",
+              "user"
+            ],
+            "type": "string"
+          },
+          "targetUserId": {
             "type": "string"
           },
           "title": {
@@ -12978,6 +13029,36 @@
         "parameters": [
           {
             "in": "query",
+            "name": "search",
+            "required": false,
+            "schema": {}
+          },
+          {
+            "in": "query",
+            "name": "targetGuestId",
+            "required": false,
+            "schema": {}
+          },
+          {
+            "in": "query",
+            "name": "targetDepartment",
+            "required": false,
+            "schema": {}
+          },
+          {
+            "in": "query",
+            "name": "targetUserId",
+            "required": false,
+            "schema": {}
+          },
+          {
+            "in": "query",
+            "name": "targetType",
+            "required": false,
+            "schema": {}
+          },
+          {
+            "in": "query",
             "name": "status",
             "required": false,
             "schema": {}
@@ -12998,14 +13079,6 @@
             "schema": {
               "example": 20,
               "type": "number"
-            }
-          },
-          {
-            "in": "query",
-            "name": "search",
-            "required": false,
-            "schema": {
-              "type": "string"
             }
           },
           {
@@ -25023,6 +25096,62 @@
               "example": "2026-05-08",
               "type": "string"
             }
+          },
+          {
+            "in": "query",
+            "name": "assignedTo",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "category",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "targetType",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "targetDepartment",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "targetUserId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "targetGuestId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -25052,6 +25181,34 @@
       "get": {
         "operationId": "MaintenanceController_findAll",
         "parameters": [
+          {
+            "description": "Filter tickets by target guest UUID",
+            "in": "query",
+            "name": "targetGuestId",
+            "required": false,
+            "schema": {}
+          },
+          {
+            "description": "Filter tickets by target department name",
+            "in": "query",
+            "name": "targetDepartment",
+            "required": false,
+            "schema": {}
+          },
+          {
+            "description": "Filter tickets by target user UUID",
+            "in": "query",
+            "name": "targetUserId",
+            "required": false,
+            "schema": {}
+          },
+          {
+            "description": "Filter tickets by target type (guest, department, user)",
+            "in": "query",
+            "name": "targetType",
+            "required": false,
+            "schema": {}
+          },
           {
             "description": "Filter tickets assigned to a specific user UUID",
             "in": "query",
