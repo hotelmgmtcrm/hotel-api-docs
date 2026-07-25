@@ -5667,23 +5667,95 @@
           "address": {
             "type": "string"
           },
+          "bankAccountNo": {
+            "example": "50100012345678",
+            "type": "string"
+          },
+          "bankIfsc": {
+            "example": "HDFC0001234",
+            "type": "string"
+          },
+          "bankName": {
+            "example": "HDFC Bank",
+            "type": "string"
+          },
+          "category": {
+            "example": "Food & Beverage",
+            "type": "string"
+          },
+          "city": {
+            "example": "Kanpur",
+            "type": "string"
+          },
+          "code": {
+            "example": "VEN-1001",
+            "type": "string"
+          },
           "contactPerson": {
+            "example": "Rajesh Kumar",
             "type": "string"
           },
           "email": {
-            "example": "sales@vendor.com",
+            "example": "orders@vendor.com",
             "type": "string"
           },
           "gstNumber": {
-            "example": "27ABCDE1234F1Z5",
+            "example": "09ABCDE1234F1Z5",
             "type": "string"
           },
+          "hotelId": {
+            "type": "string"
+          },
+          "leadTimeDays": {
+            "example": 2,
+            "type": "number"
+          },
           "name": {
-            "example": "Cool Air Pvt Ltd",
+            "example": "Sunrise Fresh Produce",
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "panNumber": {
+            "example": "ABCDE1234F",
+            "type": "string"
+          },
+          "paymentTerms": {
+            "example": "Net 30",
             "type": "string"
           },
           "phone": {
             "example": "+91-9876543210",
+            "type": "string"
+          },
+          "pinCode": {
+            "example": "208001",
+            "type": "string"
+          },
+          "ratingDelivery": {
+            "example": 4.5,
+            "type": "number"
+          },
+          "ratingPricing": {
+            "example": 4.2,
+            "type": "number"
+          },
+          "ratingQuality": {
+            "example": 4.8,
+            "type": "number"
+          },
+          "state": {
+            "example": "Uttar Pradesh",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "active",
+              "inactive",
+              "blacklisted",
+              "under_review"
+            ],
             "type": "string"
           }
         },
@@ -9077,6 +9149,105 @@
               "maintenance_staff",
               "restaurant_attendant",
               "pool_attendant"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "UpdateVendorDto": {
+        "properties": {
+          "address": {
+            "type": "string"
+          },
+          "bankAccountNo": {
+            "example": "50100012345678",
+            "type": "string"
+          },
+          "bankIfsc": {
+            "example": "HDFC0001234",
+            "type": "string"
+          },
+          "bankName": {
+            "example": "HDFC Bank",
+            "type": "string"
+          },
+          "category": {
+            "example": "Food & Beverage",
+            "type": "string"
+          },
+          "city": {
+            "example": "Kanpur",
+            "type": "string"
+          },
+          "code": {
+            "example": "VEN-1001",
+            "type": "string"
+          },
+          "contactPerson": {
+            "example": "Rajesh Kumar",
+            "type": "string"
+          },
+          "email": {
+            "example": "orders@vendor.com",
+            "type": "string"
+          },
+          "gstNumber": {
+            "example": "09ABCDE1234F1Z5",
+            "type": "string"
+          },
+          "hotelId": {
+            "type": "string"
+          },
+          "leadTimeDays": {
+            "example": 2,
+            "type": "number"
+          },
+          "name": {
+            "example": "Sunrise Fresh Produce",
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "panNumber": {
+            "example": "ABCDE1234F",
+            "type": "string"
+          },
+          "paymentTerms": {
+            "example": "Net 30",
+            "type": "string"
+          },
+          "phone": {
+            "example": "+91-9876543210",
+            "type": "string"
+          },
+          "pinCode": {
+            "example": "208001",
+            "type": "string"
+          },
+          "ratingDelivery": {
+            "example": 4.5,
+            "type": "number"
+          },
+          "ratingPricing": {
+            "example": 4.2,
+            "type": "number"
+          },
+          "ratingQuality": {
+            "example": 4.8,
+            "type": "number"
+          },
+          "state": {
+            "example": "Uttar Pradesh",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "active",
+              "inactive",
+              "blacklisted",
+              "under_review"
             ],
             "type": "string"
           }
@@ -37294,7 +37465,6 @@
             "name": "page",
             "required": false,
             "schema": {
-              "default": 1,
               "example": 1,
               "type": "number"
             }
@@ -37304,7 +37474,6 @@
             "name": "limit",
             "required": false,
             "schema": {
-              "default": 20,
               "example": 20,
               "type": "number"
             }
@@ -37336,102 +37505,6 @@
               ],
               "type": "string"
             }
-          },
-          {
-            "in": "query",
-            "name": "hotelId",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "department",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "role",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "excludeRole",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "status",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "category",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "date",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "staffId",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "month",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "year",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "type",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "priority",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -37444,7 +37517,7 @@
             "bearer": []
           }
         ],
-        "summary": "Get all vendors with pagination",
+        "summary": "Get all vendors with pagination & filtering",
         "tags": [
           "Vendors"
         ]
@@ -37472,6 +37545,129 @@
             "bearer": []
           }
         ],
+        "summary": "Register a new vendor",
+        "tags": [
+          "Vendors"
+        ]
+      }
+    },
+    "/vendors/{id}": {
+      "delete": {
+        "operationId": "VendorsController_remove",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Delete vendor",
+        "tags": [
+          "Vendors"
+        ]
+      },
+      "get": {
+        "operationId": "VendorsController_findOne",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get vendor by ID with performance & PO analytics",
+        "tags": [
+          "Vendors"
+        ]
+      },
+      "put": {
+        "operationId": "VendorsController_update",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateVendorDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update vendor details",
+        "tags": [
+          "Vendors"
+        ]
+      }
+    },
+    "/vendors/{id}/status": {
+      "patch": {
+        "operationId": "VendorsController_updateStatus",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update vendor status (active, inactive, blacklisted)",
         "tags": [
           "Vendors"
         ]
