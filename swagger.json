@@ -13317,6 +13317,33 @@
       }
     },
     "/complaints/{id}": {
+      "get": {
+        "operationId": "ComplaintsController_findOne",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get a complaint by id",
+        "tags": [
+          "Complaints"
+        ]
+      },
       "put": {
         "operationId": "ComplaintsController_update",
         "parameters": [
