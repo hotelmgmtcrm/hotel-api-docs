@@ -6555,7 +6555,8 @@
               "adjustment",
               "transfer_out",
               "transfer_in",
-              "issue_to_staff"
+              "issue_to_staff",
+              "write_off"
             ],
             "type": "string"
           }
@@ -35753,6 +35754,26 @@
         "summary": "Record stock receipt — increases on-hand quantity",
         "tags": [
           "Stock"
+        ]
+      }
+    },
+    "/store/write-off": {
+      "post": {
+        "operationId": "DepartmentStoreController_writeOff",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Write stock off at a store — breakage, loss or expiry",
+        "tags": [
+          "Department Store"
         ]
       }
     },
