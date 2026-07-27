@@ -453,6 +453,14 @@
           "message": {
             "type": "string"
           },
+          "referenceId": {
+            "description": "Id of the referenced record (e.g. a complaint id)",
+            "type": "string"
+          },
+          "referenceType": {
+            "description": "Kind of referenced record, e.g. 'complaint'",
+            "type": "string"
+          },
           "sendEmail": {
             "type": "boolean"
           },
@@ -6544,7 +6552,10 @@
             "enum": [
               "receive",
               "issue",
-              "adjustment"
+              "adjustment",
+              "transfer_out",
+              "transfer_in",
+              "issue_to_staff"
             ],
             "type": "string"
           }
@@ -34621,6 +34632,255 @@
         ]
       }
     },
+    "/store/departments/{departmentId}/movements": {
+      "get": {
+        "operationId": "DepartmentStoreController_departmentMovements",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "departmentId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "example": 20,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortOrder",
+            "required": false,
+            "schema": {
+              "enum": [
+                "ASC",
+                "DESC"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Department Store"
+        ]
+      }
+    },
+    "/store/departments/{departmentId}/stock": {
+      "get": {
+        "operationId": "DepartmentStoreController_departmentStock",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "departmentId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "lowStockOnly",
+            "required": false,
+            "schema": {}
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "required": false,
+            "schema": {}
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "example": 20,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortOrder",
+            "required": false,
+            "schema": {
+              "enum": [
+                "ASC",
+                "DESC"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Balances in one department's store",
+        "tags": [
+          "Department Store"
+        ]
+      }
+    },
+    "/store/issues": {
+      "get": {
+        "operationId": "StoreIssuesController_findAll",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "requisitionId",
+            "required": false,
+            "schema": {}
+          },
+          {
+            "in": "query",
+            "name": "departmentId",
+            "required": false,
+            "schema": {}
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "example": 20,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortOrder",
+            "required": false,
+            "schema": {
+              "enum": [
+                "ASC",
+                "DESC"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Store Issues"
+        ]
+      },
+      "post": {
+        "operationId": "StoreIssuesController_create",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Issue stock — main store to a department, or a department store to staff",
+        "tags": [
+          "Store Issues"
+        ]
+      }
+    },
     "/store/items": {
       "get": {
         "operationId": "ItemsController_findAll",
@@ -34841,6 +35101,346 @@
         "summary": "Bulk import items (upsert by name + category)",
         "tags": [
           "Store Items"
+        ]
+      }
+    },
+    "/store/main/movements": {
+      "get": {
+        "operationId": "DepartmentStoreController_mainMovements",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "example": 20,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortOrder",
+            "required": false,
+            "schema": {
+              "enum": [
+                "ASC",
+                "DESC"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Department Store"
+        ]
+      }
+    },
+    "/store/main/receive": {
+      "post": {
+        "operationId": "DepartmentStoreController_receive",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Receive stock into a store (GRN or opening balance)",
+        "tags": [
+          "Department Store"
+        ]
+      }
+    },
+    "/store/main/stock": {
+      "get": {
+        "operationId": "DepartmentStoreController_mainStock",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "lowStockOnly",
+            "required": false,
+            "schema": {}
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "required": false,
+            "schema": {}
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "example": 20,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortOrder",
+            "required": false,
+            "schema": {
+              "enum": [
+                "ASC",
+                "DESC"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Balances in the hotel's main store",
+        "tags": [
+          "Department Store"
+        ]
+      }
+    },
+    "/store/requisitions": {
+      "get": {
+        "operationId": "StoreRequisitionsController_findAll",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "departmentId",
+            "required": false,
+            "schema": {}
+          },
+          {
+            "description": "Comma-separated statuses",
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {}
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "example": 20,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortOrder",
+            "required": false,
+            "schema": {
+              "enum": [
+                "ASC",
+                "DESC"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List requisitions — the main store sees all, a department its own",
+        "tags": [
+          "Store Requisitions"
+        ]
+      },
+      "post": {
+        "operationId": "StoreRequisitionsController_create",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Raise a requisition from a department to the main store",
+        "tags": [
+          "Store Requisitions"
+        ]
+      }
+    },
+    "/store/requisitions/{id}": {
+      "get": {
+        "operationId": "StoreRequisitionsController_findOne",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Store Requisitions"
+        ]
+      }
+    },
+    "/store/requisitions/{id}/approve": {
+      "post": {
+        "operationId": "StoreRequisitionsController_approve",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Approve, optionally trimming the quantities granted",
+        "tags": [
+          "Store Requisitions"
+        ]
+      }
+    },
+    "/store/requisitions/{id}/reject": {
+      "post": {
+        "operationId": "StoreRequisitionsController_reject",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Store Requisitions"
         ]
       }
     },
