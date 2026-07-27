@@ -566,7 +566,23 @@
         "type": "object"
       },
       "ComplaintMediaDto": {
-        "properties": {},
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "size": {
+            "type": "number"
+          },
+          "type": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        },
         "type": "object"
       },
       "CompleteTaskDto": {
@@ -1390,9 +1406,11 @@
             "type": "string"
           },
           "createdBy": {
+            "readOnly": true,
             "type": "string"
           },
           "createdByName": {
+            "readOnly": true,
             "type": "string"
           },
           "department": {
@@ -1416,6 +1434,13 @@
             "description": "Hotel UUID — defaults to caller's currentHotelId",
             "type": "string"
           },
+          "media": {
+            "description": "Files attached when logging the complaint",
+            "items": {
+              "$ref": "#/components/schemas/ComplaintMediaDto"
+            },
+            "type": "array"
+          },
           "priority": {
             "enum": [
               "low",
@@ -1423,6 +1448,10 @@
               "high",
               "urgent"
             ],
+            "type": "string"
+          },
+          "requesterDepartment": {
+            "description": "Department the complaint is raised BY",
             "type": "string"
           },
           "roomNumber": {
@@ -7056,6 +7085,7 @@
       "UpdateComplaintDto": {
         "properties": {
           "assignedTo": {
+            "description": "Legacy alias for assignedToId",
             "type": "string"
           },
           "assignedToId": {
@@ -7068,6 +7098,7 @@
             "items": {
               "type": "string"
             },
+            "readOnly": true,
             "type": "array"
           },
           "assignmentMedia": {
@@ -7087,12 +7118,6 @@
             "description": "Alias for department (frontend compat)",
             "type": "string"
           },
-          "createdBy": {
-            "type": "string"
-          },
-          "createdByName": {
-            "type": "string"
-          },
           "department": {
             "description": "Department to route to (housekeeping/maintenance/etc.)",
             "type": "string"
@@ -7110,9 +7135,12 @@
           "guestPhone": {
             "type": "string"
           },
-          "hotelId": {
-            "description": "Hotel UUID — defaults to caller's currentHotelId",
-            "type": "string"
+          "media": {
+            "description": "Files attached when logging the complaint",
+            "items": {
+              "$ref": "#/components/schemas/ComplaintMediaDto"
+            },
+            "type": "array"
           },
           "priority": {
             "enum": [
@@ -7121,6 +7149,10 @@
               "high",
               "urgent"
             ],
+            "type": "string"
+          },
+          "requesterDepartment": {
+            "description": "Department the complaint is raised BY",
             "type": "string"
           },
           "resolution": {
@@ -7136,9 +7168,11 @@
             "type": "string"
           },
           "resolvedBy": {
+            "readOnly": true,
             "type": "string"
           },
           "resolvedByName": {
+            "readOnly": true,
             "type": "string"
           },
           "roomNumber": {
@@ -13251,6 +13285,50 @@
           },
           {
             "in": "query",
+            "name": "dateTo",
+            "required": false,
+            "schema": {}
+          },
+          {
+            "in": "query",
+            "name": "dateFrom",
+            "required": false,
+            "schema": {}
+          },
+          {
+            "in": "query",
+            "name": "createdBy",
+            "required": false,
+            "schema": {}
+          },
+          {
+            "in": "query",
+            "name": "assignedToId",
+            "required": false,
+            "schema": {}
+          },
+          {
+            "in": "query",
+            "name": "requesterDepartment",
+            "required": false,
+            "schema": {}
+          },
+          {
+            "in": "query",
+            "name": "department",
+            "required": false,
+            "schema": {}
+          },
+          {
+            "description": "Comma-separated list of priorities",
+            "in": "query",
+            "name": "priority",
+            "required": false,
+            "schema": {}
+          },
+          {
+            "description": "Comma-separated list of statuses",
+            "in": "query",
             "name": "status",
             "required": false,
             "schema": {}
@@ -13337,6 +13415,26 @@
         ]
       }
     },
+    "/complaints/stats": {
+      "get": {
+        "operationId": "ComplaintsController_stats",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Status / priority breakdown for the current hotel",
+        "tags": [
+          "Complaints"
+        ]
+      }
+    },
     "/complaints/{id}": {
       "get": {
         "operationId": "ComplaintsController_findOne",
@@ -13361,6 +13459,43 @@
           }
         ],
         "summary": "Get a complaint by id",
+        "tags": [
+          "Complaints"
+        ]
+      },
+      "patch": {
+        "operationId": "ComplaintsController_patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateComplaintDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Partially update a complaint (alias of PUT)",
         "tags": [
           "Complaints"
         ]
@@ -13397,7 +13532,36 @@
             "bearer": []
           }
         ],
-        "summary": "Update a complaint",
+        "summary": "Update a complaint (assign, resolve, close, re-open)",
+        "tags": [
+          "Complaints"
+        ]
+      }
+    },
+    "/complaints/{id}/status": {
+      "put": {
+        "operationId": "ComplaintsController_updateStatus",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Change only the status of a complaint (used by the mobile app)",
         "tags": [
           "Complaints"
         ]
