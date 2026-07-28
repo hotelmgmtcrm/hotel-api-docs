@@ -2953,6 +2953,11 @@
             "example": 2,
             "type": "number"
           },
+          "inUseStock": {
+            "description": "Quantity already out in service at registration",
+            "example": 12,
+            "type": "number"
+          },
           "minimumStock": {
             "description": "Reorder level — alert below this",
             "example": 10,
@@ -34820,6 +34825,26 @@
           }
         ],
         "summary": "Balances in one department's store",
+        "tags": [
+          "Department Store"
+        ]
+      }
+    },
+    "/store/in-use": {
+      "post": {
+        "operationId": "DepartmentStoreController_setInUse",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Set how much of a store's balance is out in service",
         "tags": [
           "Department Store"
         ]
