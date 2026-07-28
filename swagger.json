@@ -493,6 +493,10 @@
       },
       "BulkImportItemsDto": {
         "properties": {
+          "departmentId": {
+            "description": "Store that receives the opening quantity. Omit for the hotel main store.",
+            "type": "string"
+          },
           "items": {
             "description": "Items to upsert (matched by name + category)",
             "items": {
@@ -35049,16 +35053,6 @@
       "post": {
         "operationId": "ItemsController_create",
         "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateItemDto"
-              }
-            }
-          },
-          "required": true
-        },
         "responses": {
           "201": {
             "description": ""
@@ -35069,7 +35063,7 @@
             "bearer": []
           }
         ],
-        "summary": "Create a single store item",
+        "summary": "Create a store item. Any opening quantity is posted to the store named by departmentId (main store when omitted).",
         "tags": [
           "Store Items"
         ]
