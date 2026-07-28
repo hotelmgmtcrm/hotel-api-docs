@@ -3006,16 +3006,32 @@
             "type": "boolean"
           },
           "itemType": {
-            "description": "Type of laundry item",
-            "example": "Bedsheet",
+            "description": "Derived from `items` when omitted",
+            "example": "Trouser x3, Suit x4",
             "type": "string"
+          },
+          "items": {
+            "description": "The garments handed in. Item names depend on laundryType.",
+            "example": [
+              {
+                "name": "Trouser",
+                "quantity": 3
+              },
+              {
+                "name": "Suit",
+                "quantity": 4
+              }
+            ],
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
           },
           "laundryType": {
             "enum": [
               "guest",
               "staff",
-              "linen",
-              "uniform"
+              "hk_store"
             ],
             "type": "string"
           },
@@ -3044,9 +3060,6 @@
             "type": "string"
           }
         },
-        "required": [
-          "itemType"
-        ],
         "type": "object"
       },
       "CreateLeadDto": {
@@ -5600,6 +5613,10 @@
             "description": "Staff UUID issued to",
             "type": "string"
           },
+          "staffName": {
+            "description": "Cached display name of the holder",
+            "type": "string"
+          },
           "status": {
             "enum": [
               "issued",
@@ -7972,6 +7989,80 @@
         },
         "type": "object"
       },
+      "UpdateLaundryDto": {
+        "properties": {
+          "dirtLevel": {
+            "enum": [
+              "none",
+              "light",
+              "medium",
+              "heavy"
+            ],
+            "type": "string"
+          },
+          "guestId": {
+            "description": "Linked guest UUID",
+            "type": "string"
+          },
+          "isTagged": {
+            "type": "boolean"
+          },
+          "itemType": {
+            "example": "Bedsheet",
+            "type": "string"
+          },
+          "items": {
+            "description": "The garments in the bundle",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "laundryType": {
+            "enum": [
+              "guest",
+              "staff",
+              "linen",
+              "uniform"
+            ],
+            "type": "string"
+          },
+          "price": {
+            "description": "Charge in INR",
+            "type": "number"
+          },
+          "quantity": {
+            "example": 1,
+            "type": "number"
+          },
+          "remarks": {
+            "type": "string"
+          },
+          "roomId": {
+            "description": "Linked room UUID",
+            "type": "string"
+          },
+          "stainLevel": {
+            "enum": [
+              "none",
+              "light",
+              "medium",
+              "heavy"
+            ],
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "pending",
+              "in_progress",
+              "completed",
+              "cancelled"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "UpdateLeadDto": {
         "properties": {
           "addons": {
@@ -9176,6 +9267,34 @@
             "type": "string"
           },
           "type": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "UpdateUniformStatusDto": {
+        "properties": {
+          "conditionOnReturn": {
+            "description": "Condition the garment came back in",
+            "enum": [
+              "new",
+              "good",
+              "fair",
+              "poor"
+            ],
+            "type": "string"
+          },
+          "notes": {
+            "description": "Why it was written off, or return notes",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "issued",
+              "returned",
+              "damaged",
+              "lost"
+            ],
             "type": "string"
           }
         },
@@ -17962,6 +18081,16 @@
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateLaundryDto"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": ""
@@ -17972,6 +18101,7 @@
             "bearer": []
           }
         ],
+        "summary": "Update a laundry record — status, item details or charge",
         "tags": [
           "Housekeeping"
         ]
@@ -19121,6 +19251,16 @@
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUniformStatusDto"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": ""
@@ -19131,6 +19271,7 @@
             "bearer": []
           }
         ],
+        "summary": "Return, damage or write off an issued garment",
         "tags": [
           "Housekeeping"
         ]
