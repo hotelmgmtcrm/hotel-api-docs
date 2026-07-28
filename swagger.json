@@ -290,6 +290,10 @@
       },
       "AssignHKRoomDto": {
         "properties": {
+          "additionalNotes": {
+            "description": "Extra context for the assignment",
+            "type": "string"
+          },
           "assignedTo": {
             "description": "Room attendant user UUID",
             "type": "string"
@@ -298,12 +302,23 @@
             "description": "Cached display name of the assignee",
             "type": "string"
           },
+          "attachments": {
+            "description": "Reference files — photos, video, audio, PDF, doc",
+            "items": {
+              "type": "array"
+            },
+            "type": "array"
+          },
           "checklist": {
             "description": "Per-room cleaning checklist items",
             "items": {
               "type": "array"
             },
             "type": "array"
+          },
+          "cleaningType": {
+            "description": "daily | departure | deep",
+            "type": "string"
           },
           "estimatedTime": {
             "description": "Estimated cleaning time in minutes",
@@ -322,12 +337,32 @@
             "description": "Cached display name of the inspector",
             "type": "string"
           },
+          "instructions": {
+            "description": "Instructions for the attendant",
+            "type": "string"
+          },
+          "priority": {
+            "description": "low | medium | high | urgent",
+            "type": "string"
+          },
           "remarks": {
             "description": "Free-text remarks for the attendant",
             "type": "string"
           },
           "roomId": {
             "description": "Room UUID to assign for cleaning",
+            "type": "string"
+          },
+          "scheduledDate": {
+            "description": "Date the clean is due (YYYY-MM-DD)",
+            "type": "string"
+          },
+          "scheduledTime": {
+            "description": "Time the clean is due (HH:mm)",
+            "type": "string"
+          },
+          "taskTitle": {
+            "description": "Headline for the assignment",
             "type": "string"
           }
         },
