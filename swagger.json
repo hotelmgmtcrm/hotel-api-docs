@@ -110,6 +110,25 @@
         ],
         "type": "object"
       },
+      "ApproveExpenseDto": {
+        "properties": {
+          "remarks": {
+            "description": "Why it was rejected",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "approved",
+              "rejected"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "type": "object"
+      },
       "ApproveRequisitionDto": {
         "properties": {
           "remarks": {
@@ -223,6 +242,16 @@
               "bellboy",
               "adviser",
               "accounts_cashier",
+              "finance_director",
+              "finance_manager",
+              "senior_accountant",
+              "accountant",
+              "accounts_executive",
+              "chartered_accountant",
+              "payroll_executive",
+              "income_auditor",
+              "tax_executive",
+              "mis_executive",
               "maintenance_staff",
               "restaurant_attendant",
               "pool_attendant"
@@ -437,6 +466,16 @@
               "bellboy",
               "adviser",
               "accounts_cashier",
+              "finance_director",
+              "finance_manager",
+              "senior_accountant",
+              "accountant",
+              "accounts_executive",
+              "chartered_accountant",
+              "payroll_executive",
+              "income_auditor",
+              "tax_executive",
+              "mis_executive",
               "maintenance_staff",
               "restaurant_attendant",
               "pool_attendant"
@@ -609,6 +648,29 @@
         "required": [
           "currentPassword",
           "newPassword"
+        ],
+        "type": "object"
+      },
+      "CloseCashierLogDto": {
+        "properties": {
+          "actualCashInHand": {
+            "description": "Cash actually counted at handover",
+            "type": "number"
+          },
+          "remarks": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "open",
+              "closed",
+              "reconciled"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "status"
         ],
         "type": "object"
       },
@@ -1302,6 +1364,53 @@
             "type": "string"
           }
         },
+        "type": "object"
+      },
+      "CreateCashierLogDto": {
+        "properties": {
+          "actualCashInHand": {
+            "type": "number"
+          },
+          "cashPaidOut": {
+            "type": "number"
+          },
+          "cashSales": {
+            "type": "number"
+          },
+          "cashierName": {
+            "type": "string"
+          },
+          "closingBalance": {
+            "type": "number"
+          },
+          "hotelId": {
+            "type": "string"
+          },
+          "openingBalance": {
+            "type": "number"
+          },
+          "otherReceipts": {
+            "type": "number"
+          },
+          "remarks": {
+            "type": "string"
+          },
+          "shift": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "open",
+              "closed",
+              "reconciled"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "cashierName",
+          "shift"
+        ],
         "type": "object"
       },
       "CreateChecklistRuleDto": {
@@ -2126,6 +2235,10 @@
           "receiptUrl": {
             "description": "Receipt scan URL from uploads service",
             "type": "string"
+          },
+          "title": {
+            "example": "Diesel for generator",
+            "type": "string"
           }
         },
         "required": [
@@ -2766,6 +2879,50 @@
         },
         "required": [
           "area"
+        ],
+        "type": "object"
+      },
+      "CreateIncomeAuditDto": {
+        "properties": {
+          "auditDate": {
+            "type": "string"
+          },
+          "fNBRevenue": {
+            "type": "number"
+          },
+          "hotelId": {
+            "type": "string"
+          },
+          "otherRevenue": {
+            "type": "number"
+          },
+          "remarks": {
+            "type": "string"
+          },
+          "roomRevenue": {
+            "type": "number"
+          },
+          "status": {
+            "enum": [
+              "pending",
+              "draft",
+              "completed",
+              "flagged"
+            ],
+            "type": "string"
+          },
+          "totalPayments": {
+            "type": "number"
+          },
+          "totalRevenue": {
+            "type": "number"
+          },
+          "variance": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "auditDate"
         ],
         "type": "object"
       },
@@ -3756,6 +3913,11 @@
             "example": 5000,
             "type": "number"
           },
+          "description": {
+            "description": "Linked entity ID (booking/invoice/expense)",
+            "example": "August vendor settlement",
+            "type": "string"
+          },
           "method": {
             "enum": [
               "cash",
@@ -3772,10 +3934,6 @@
           },
           "paymentDate": {
             "example": "2026-05-08",
-            "type": "string"
-          },
-          "referenceId": {
-            "description": "Linked entity ID (booking/invoice/expense)",
             "type": "string"
           },
           "remarks": {
@@ -5746,6 +5904,16 @@
               "bellboy",
               "adviser",
               "accounts_cashier",
+              "finance_director",
+              "finance_manager",
+              "senior_accountant",
+              "accountant",
+              "accounts_executive",
+              "chartered_accountant",
+              "payroll_executive",
+              "income_auditor",
+              "tax_executive",
+              "mis_executive",
               "maintenance_staff",
               "restaurant_attendant",
               "pool_attendant"
@@ -6381,6 +6549,16 @@
               "bellboy",
               "adviser",
               "accounts_cashier",
+              "finance_director",
+              "finance_manager",
+              "senior_accountant",
+              "accountant",
+              "accounts_executive",
+              "chartered_accountant",
+              "payroll_executive",
+              "income_auditor",
+              "tax_executive",
+              "mis_executive",
               "maintenance_staff",
               "restaurant_attendant",
               "pool_attendant"
@@ -6879,6 +7057,26 @@
             "type": "string"
           }
         },
+        "type": "object"
+      },
+      "UpdateAuditStatusDto": {
+        "properties": {
+          "remarks": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "pending",
+              "draft",
+              "completed",
+              "flagged"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "status"
+        ],
         "type": "object"
       },
       "UpdateBanquetMenuDto": {
@@ -9376,6 +9574,16 @@
               "bellboy",
               "adviser",
               "accounts_cashier",
+              "finance_director",
+              "finance_manager",
+              "senior_accountant",
+              "accountant",
+              "accounts_executive",
+              "chartered_accountant",
+              "payroll_executive",
+              "income_auditor",
+              "tax_executive",
+              "mis_executive",
               "maintenance_staff",
               "restaurant_attendant",
               "pool_attendant"
@@ -12642,6 +12850,237 @@
         ]
       }
     },
+    "/cashier-logs": {
+      "get": {
+        "operationId": "CashierController_findAll",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "example": 20,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortOrder",
+            "required": false,
+            "schema": {
+              "enum": [
+                "ASC",
+                "DESC"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "department",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "role",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "excludeRole",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "category",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "date",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "staffId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "month",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "year",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "type",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "priority",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get all cashier logs with pagination",
+        "tags": [
+          "Cashier Portal"
+        ]
+      },
+      "post": {
+        "operationId": "CashierController_create",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCashierLogDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Cashier Portal"
+        ]
+      }
+    },
+    "/cashier-logs/{id}/close": {
+      "patch": {
+        "operationId": "CashierController_close",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CloseCashierLogDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Close or reconcile a handover, recording counted cash",
+        "tags": [
+          "Cashier Portal"
+        ]
+      }
+    },
     "/checklist-rules": {
       "get": {
         "operationId": "ChecklistRuleController_findAll",
@@ -14907,22 +15346,6 @@
         "parameters": [
           {
             "in": "query",
-            "name": "hotelId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "departmentId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
             "name": "page",
             "required": false,
             "schema": {
@@ -14966,6 +15389,14 @@
                 "ASC",
                 "DESC"
               ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "hotelId",
+            "required": false,
+            "schema": {
               "type": "string"
             }
           },
@@ -15052,6 +15483,15 @@
           {
             "in": "query",
             "name": "priority",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Limit results to one department",
+            "in": "query",
+            "name": "departmentId",
             "required": false,
             "schema": {
               "type": "string"
@@ -16397,6 +16837,45 @@
         ]
       }
     },
+    "/expenses/{id}/status": {
+      "patch": {
+        "operationId": "ExpensesController_setStatus",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApproveExpenseDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Approve or reject a pending expense",
+        "tags": [
+          "Expenses"
+        ]
+      }
+    },
     "/feedback": {
       "get": {
         "operationId": "FeedbackController_findAll",
@@ -16595,19 +17074,19 @@
         "parameters": [
           {
             "in": "query",
-            "name": "startDate",
+            "name": "endDate",
             "required": false,
             "schema": {
-              "example": "2025-01-01",
+              "example": "2025-12-31",
               "type": "string"
             }
           },
           {
             "in": "query",
-            "name": "endDate",
+            "name": "startDate",
             "required": false,
             "schema": {
-              "example": "2025-12-31",
+              "example": "2025-01-01",
               "type": "string"
             }
           }
@@ -22383,6 +22862,237 @@
         "summary": "Update training record",
         "tags": [
           "HR - Training"
+        ]
+      }
+    },
+    "/income-audits": {
+      "get": {
+        "operationId": "AuditsController_findAll",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "example": 20,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortOrder",
+            "required": false,
+            "schema": {
+              "enum": [
+                "ASC",
+                "DESC"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "department",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "role",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "excludeRole",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "category",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "date",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "staffId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "month",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "year",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "type",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "priority",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get all income audits with pagination",
+        "tags": [
+          "Income Audit"
+        ]
+      },
+      "post": {
+        "operationId": "AuditsController_create",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateIncomeAuditDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Income Audit"
+        ]
+      }
+    },
+    "/income-audits/{id}/status": {
+      "patch": {
+        "operationId": "AuditsController_setStatus",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAuditStatusDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Complete or flag an income audit entry",
+        "tags": [
+          "Income Audit"
         ]
       }
     },
