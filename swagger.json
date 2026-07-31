@@ -4505,7 +4505,7 @@
           },
           "shiftId": {
             "description": "Optional shift-template UUID (hr.shifts.id). When set, the row inherits the template's start/end times and department.",
-            "type": "string"
+            "type": "object"
           },
           "staffId": {
             "description": "Staff user UUID",
@@ -8956,7 +8956,7 @@
           },
           "shiftId": {
             "description": "Optional shift-template UUID (hr.shifts.id). When set, the row inherits the template's start/end times and department.",
-            "type": "string"
+            "type": "object"
           },
           "staffId": {
             "description": "Staff user UUID",
