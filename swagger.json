@@ -4089,8 +4089,9 @@
           "targetType": {
             "enum": [
               "room",
-              "area",
-              "task"
+              "deep_cleaning",
+              "task",
+              "area"
             ],
             "type": "string"
           }
