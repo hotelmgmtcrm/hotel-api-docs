@@ -4050,6 +4050,13 @@
           "areaName": {
             "type": "string"
           },
+          "attachments": {
+            "description": "Optional evidence photos",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
           "category": {
             "type": "string"
           },
@@ -4058,6 +4065,14 @@
               "type": "object"
             },
             "type": "array"
+          },
+          "decision": {
+            "description": "Explicit supervisor decision. Overrides the score derived from the checklist.",
+            "enum": [
+              "approve",
+              "reject"
+            ],
+            "type": "string"
           },
           "hotelId": {
             "type": "string"
@@ -4082,8 +4097,7 @@
         },
         "required": [
           "targetType",
-          "targetName",
-          "checklist"
+          "targetName"
         ],
         "type": "object"
       },
@@ -5364,6 +5378,10 @@
               "$ref": "#/components/schemas/CreateSubTaskDto"
             },
             "type": "array"
+          },
+          "supervisorApproval": {
+            "description": "Whether a supervisor must sign this off",
+            "type": "boolean"
           },
           "tags": {
             "description": "Comma-separated tags",
@@ -9285,12 +9303,18 @@
           "assignedToId": {
             "type": "string"
           },
+          "category": {
+            "type": "string"
+          },
           "checklist": {
             "description": "Replaces the existing checklist when provided",
             "items": {
               "type": "string"
             },
             "type": "array"
+          },
+          "department": {
+            "type": "string"
           },
           "description": {
             "type": "string"
@@ -9344,6 +9368,9 @@
             "type": "string"
           },
           "remarks": {
+            "type": "string"
+          },
+          "roomId": {
             "type": "string"
           },
           "scheduledTime": {
