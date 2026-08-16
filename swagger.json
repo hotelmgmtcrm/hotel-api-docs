@@ -1413,6 +1413,18 @@
         ],
         "type": "object"
       },
+      "CreateCategoryDto": {
+        "properties": {
+          "name": {
+            "example": "Cleaning Supplies",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "type": "object"
+      },
       "CreateChecklistRuleDto": {
         "properties": {
           "area": {
@@ -6610,6 +6622,23 @@
             "type": "string"
           }
         },
+        "type": "object"
+      },
+      "RenameCategoryDto": {
+        "properties": {
+          "from": {
+            "example": "Cleaning",
+            "type": "string"
+          },
+          "to": {
+            "example": "Cleaning Supplies",
+            "type": "string"
+          }
+        },
+        "required": [
+          "from",
+          "to"
+        ],
         "type": "object"
       },
       "ReplaceAllMenusDto": {
@@ -36033,6 +36062,177 @@
           }
         ],
         "summary": "Bulk import items (upsert by name + category)",
+        "tags": [
+          "Store Items"
+        ]
+      }
+    },
+    "/store/items/categories": {
+      "get": {
+        "operationId": "ItemsController_listCategories",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List managed categories with their item counts",
+        "tags": [
+          "Store Items"
+        ]
+      },
+      "patch": {
+        "operationId": "ItemsController_renameCategory",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RenameCategoryDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Rename a category across every item that uses it",
+        "tags": [
+          "Store Items"
+        ]
+      },
+      "post": {
+        "operationId": "ItemsController_createCategory",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCategoryDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Create a category",
+        "tags": [
+          "Store Items"
+        ]
+      }
+    },
+    "/store/items/categories/{id}": {
+      "delete": {
+        "operationId": "ItemsController_removeCategory",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Delete a category — its items are kept and become uncategorised",
+        "tags": [
+          "Store Items"
+        ]
+      },
+      "patch": {
+        "operationId": "ItemsController_updateCategory",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCategoryDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Rename a category and every item carrying it",
+        "tags": [
+          "Store Items"
+        ]
+      }
+    },
+    "/store/items/categories/{name}": {
+      "delete": {
+        "operationId": "ItemsController_deleteCategory",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Clear a category — its items are kept and become uncategorised",
         "tags": [
           "Store Items"
         ]
