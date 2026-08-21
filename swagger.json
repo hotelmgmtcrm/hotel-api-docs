@@ -39884,6 +39884,35 @@
           "Vendors"
         ]
       }
+    },
+    "/work-overview": {
+      "get": {
+        "operationId": "WorkOverviewController_getOverview",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "hotelId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Areas and rooms with their current status, as two flat lists",
+        "tags": [
+          "Work Overview"
+        ]
+      }
     }
   },
   "servers": [
