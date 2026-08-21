@@ -5446,6 +5446,55 @@
         ],
         "type": "object"
       },
+      "CreateTaskTemplateDto": {
+        "properties": {
+          "applicableCategories": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "department": {
+            "default": "Housekeeping",
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "estimatedDuration": {
+            "example": "45 Minutes",
+            "type": "string"
+          },
+          "estimatedMinutes": {
+            "example": 45,
+            "type": "number"
+          },
+          "hotelId": {
+            "type": "string"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "name": {
+            "example": "Admin office (with washroom & lobby)",
+            "type": "string"
+          },
+          "priority": {
+            "example": "Medium",
+            "type": "string"
+          },
+          "requiresPhotoUpload": {
+            "type": "boolean"
+          },
+          "requiresSupervisorApproval": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "type": "object"
+      },
       "CreateTemplateDto": {
         "properties": {
           "active": {
@@ -9466,6 +9515,52 @@
           },
           "toLongitude": {
             "type": "number"
+          }
+        },
+        "type": "object"
+      },
+      "UpdateTaskTemplateDto": {
+        "properties": {
+          "applicableCategories": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "department": {
+            "default": "Housekeeping",
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "estimatedDuration": {
+            "example": "45 Minutes",
+            "type": "string"
+          },
+          "estimatedMinutes": {
+            "example": 45,
+            "type": "number"
+          },
+          "hotelId": {
+            "type": "string"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "name": {
+            "example": "Admin office (with washroom & lobby)",
+            "type": "string"
+          },
+          "priority": {
+            "example": "Medium",
+            "type": "string"
+          },
+          "requiresPhotoUpload": {
+            "type": "boolean"
+          },
+          "requiresSupervisorApproval": {
+            "type": "boolean"
           }
         },
         "type": "object"
@@ -37432,6 +37527,143 @@
         ],
         "tags": [
           "Tables"
+        ]
+      }
+    },
+    "/task-templates": {
+      "get": {
+        "operationId": "TaskTemplatesController_findAll",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "department",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "activeOnly",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "hotelId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Task templates for the caller's hotel",
+        "tags": [
+          "Task Templates"
+        ]
+      },
+      "post": {
+        "operationId": "TaskTemplatesController_create",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTaskTemplateDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Task Templates"
+        ]
+      }
+    },
+    "/task-templates/{id}": {
+      "delete": {
+        "operationId": "TaskTemplatesController_remove",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Retire a template — it stops being offered for new work",
+        "tags": [
+          "Task Templates"
+        ]
+      },
+      "patch": {
+        "operationId": "TaskTemplatesController_update",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTaskTemplateDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Task Templates"
         ]
       }
     },
