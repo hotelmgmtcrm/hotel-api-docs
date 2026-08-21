@@ -331,6 +331,20 @@
             "description": "Cached display name of the assignee",
             "type": "string"
           },
+          "assigneeIds": {
+            "description": "Additional room attendant UUIDs sharing this one job",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "assigneeNames": {
+            "description": "Display names matching assigneeIds, same order",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
           "attachments": {
             "description": "Reference files — photos, video, audio, PDF, doc",
             "items": {
