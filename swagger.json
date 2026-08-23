@@ -5309,6 +5309,19 @@
             "description": "Assignee user UUID",
             "type": "string"
           },
+          "assigneeIds": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "assigneeNames": {
+            "description": "Names matching assigneeIds",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
           "attachments": {
             "items": {
               "$ref": "#/components/schemas/TaskAttachmentDto"
@@ -9395,6 +9408,18 @@
           },
           "assignedToId": {
             "type": "string"
+          },
+          "assigneeIds": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "assigneeNames": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
           },
           "category": {
             "type": "string"
@@ -19451,6 +19476,35 @@
           }
         ],
         "summary": "Get a single housekeeping room task",
+        "tags": [
+          "Housekeeping"
+        ]
+      }
+    },
+    "/hk/room/{id}/crew": {
+      "patch": {
+        "operationId": "HousekeepingController_setRoomCrew",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Replace who is working a room, keeping the job intact",
         "tags": [
           "Housekeeping"
         ]
