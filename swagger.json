@@ -598,6 +598,99 @@
         ],
         "type": "object"
       },
+      "BulkInventoryDto": {
+        "properties": {
+          "allotment": {
+            "description": "Rooms offered for sale",
+            "type": "number"
+          },
+          "blocked": {
+            "description": "Rooms held back, not sold",
+            "type": "number"
+          },
+          "closedToArrival": {
+            "type": "boolean"
+          },
+          "closedToDeparture": {
+            "type": "boolean"
+          },
+          "from": {
+            "example": "2026-09-01",
+            "type": "string"
+          },
+          "maxStay": {
+            "type": "number"
+          },
+          "minStay": {
+            "type": "number"
+          },
+          "roomTypeId": {
+            "type": "string"
+          },
+          "stopSell": {
+            "description": "Closes the date on every channel",
+            "type": "boolean"
+          },
+          "to": {
+            "description": "Inclusive",
+            "example": "2026-09-30",
+            "type": "string"
+          }
+        },
+        "required": [
+          "roomTypeId",
+          "from",
+          "to"
+        ],
+        "type": "object"
+      },
+      "BulkRateDto": {
+        "properties": {
+          "daysOfWeek": {
+            "example": [
+              5,
+              6
+            ],
+            "items": {
+              "type": "number"
+            },
+            "type": "array"
+          },
+          "extraAdultRate": {
+            "type": "number"
+          },
+          "extraChildRate": {
+            "type": "number"
+          },
+          "from": {
+            "example": "2026-09-01",
+            "type": "string"
+          },
+          "rate": {
+            "example": 5500,
+            "type": "number"
+          },
+          "ratePlanId": {
+            "type": "string"
+          },
+          "reason": {
+            "example": "Diwali season",
+            "type": "string"
+          },
+          "to": {
+            "description": "Inclusive",
+            "example": "2026-09-30",
+            "type": "string"
+          }
+        },
+        "required": [
+          "ratePlanId",
+          "from",
+          "to",
+          "rate"
+        ],
+        "type": "object"
+      },
       "BulkSendDto": {
         "properties": {
           "channel": {
@@ -729,6 +822,49 @@
             "type": "string"
           }
         },
+        "type": "object"
+      },
+      "ConnectChannelDto": {
+        "properties": {
+          "credentials": {
+            "example": {
+              "apiKey": "…",
+              "propertyPassword": "…"
+            },
+            "type": "object"
+          },
+          "externalPropertyId": {
+            "description": "The channel's own id for this property",
+            "type": "string"
+          },
+          "useOrganizationCredentials": {
+            "description": "Use the group's shared credentials",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "credentials",
+          "externalPropertyId"
+        ],
+        "type": "object"
+      },
+      "ConnectOrganizationDto": {
+        "properties": {
+          "credentials": {
+            "example": {
+              "apiKey": "…"
+            },
+            "type": "object"
+          },
+          "organizationId": {
+            "description": "Organization these credentials cover",
+            "type": "string"
+          }
+        },
+        "required": [
+          "organizationId",
+          "credentials"
+        ],
         "type": "object"
       },
       "CreateActivityLogDto": {
@@ -4240,6 +4376,86 @@
         ],
         "type": "object"
       },
+      "CreateRatePlanDto": {
+        "properties": {
+          "baseRate": {
+            "example": 4500,
+            "type": "number"
+          },
+          "cancellationType": {
+            "enum": [
+              "free_until",
+              "non_refundable",
+              "partial"
+            ],
+            "type": "string"
+          },
+          "code": {
+            "example": "DLX-CP",
+            "type": "string"
+          },
+          "currency": {
+            "default": "INR",
+            "type": "string"
+          },
+          "extraAdultRate": {
+            "example": 1000,
+            "type": "number"
+          },
+          "extraChildRate": {
+            "example": 500,
+            "type": "number"
+          },
+          "freeCancelHours": {
+            "default": 24,
+            "type": "number"
+          },
+          "isPublic": {
+            "description": "False keeps the plan off every OTA",
+            "type": "boolean"
+          },
+          "maxStay": {
+            "type": "number"
+          },
+          "mealPlan": {
+            "default": "EP",
+            "enum": [
+              "EP",
+              "CP",
+              "MAP",
+              "AP"
+            ],
+            "type": "string"
+          },
+          "minStay": {
+            "default": 1,
+            "type": "number"
+          },
+          "name": {
+            "example": "Bed & Breakfast",
+            "type": "string"
+          },
+          "penaltyPercent": {
+            "type": "number"
+          },
+          "roomTypeId": {
+            "type": "string"
+          },
+          "taxInclusive": {
+            "type": "boolean"
+          },
+          "taxPercent": {
+            "example": 12,
+            "type": "number"
+          }
+        },
+        "required": [
+          "roomTypeId",
+          "name",
+          "baseRate"
+        ],
+        "type": "object"
+      },
       "CreateRecipeDto": {
         "properties": {
           "category": {
@@ -4413,6 +4629,10 @@
             "example": "204",
             "type": "string"
           },
+          "roomTypeId": {
+            "description": "Sellable room type this room belongs to",
+            "type": "string"
+          },
           "status": {
             "enum": [
               "available",
@@ -4487,6 +4707,58 @@
             "type": "number"
           }
         },
+        "type": "object"
+      },
+      "CreateRoomTypeDto": {
+        "properties": {
+          "amenities": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "baseOccupancy": {
+            "default": 2,
+            "type": "number"
+          },
+          "bedType": {
+            "example": "King",
+            "type": "string"
+          },
+          "code": {
+            "example": "DLX",
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "extraBeds": {
+            "type": "number"
+          },
+          "maxAdults": {
+            "type": "number"
+          },
+          "maxChildren": {
+            "type": "number"
+          },
+          "maxOccupancy": {
+            "default": 2,
+            "type": "number"
+          },
+          "name": {
+            "example": "Deluxe Room",
+            "type": "string"
+          },
+          "sizeSqft": {
+            "type": "number"
+          },
+          "sortOrder": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "name"
+        ],
         "type": "object"
       },
       "CreateRosterDto": {
@@ -6863,6 +7135,46 @@
         ],
         "type": "object"
       },
+      "SetMappingDto": {
+        "properties": {
+          "externalId": {
+            "description": "The channel's id for the same thing",
+            "type": "string"
+          },
+          "externalName": {
+            "type": "string"
+          },
+          "internalId": {
+            "description": "Our room type / rate plan / hotel id",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "property",
+              "room_type",
+              "rate_plan"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "internalId",
+          "externalId"
+        ],
+        "type": "object"
+      },
+      "SetSyncEnabledDto": {
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "enabled"
+        ],
+        "type": "object"
+      },
       "StaffWorkloadDto": {
         "properties": {
           "completedInRange": {
@@ -7089,6 +7401,32 @@
           "byUrgency",
           "recentOpen"
         ],
+        "type": "object"
+      },
+      "TriggerSyncDto": {
+        "properties": {
+          "from": {
+            "example": "2026-08-24",
+            "type": "string"
+          },
+          "syncType": {
+            "default": "availability",
+            "enum": [
+              "availability",
+              "rates",
+              "restrictions",
+              "reservation_pull",
+              "reservation_push",
+              "reconcile",
+              "token_refresh"
+            ],
+            "type": "string"
+          },
+          "to": {
+            "example": "2026-11-24",
+            "type": "string"
+          }
+        },
         "type": "object"
       },
       "UniformAttachmentDto": {
@@ -8869,6 +9207,84 @@
         ],
         "type": "object"
       },
+      "UpdateRatePlanDto": {
+        "properties": {
+          "baseRate": {
+            "example": 4500,
+            "type": "number"
+          },
+          "cancellationType": {
+            "enum": [
+              "free_until",
+              "non_refundable",
+              "partial"
+            ],
+            "type": "string"
+          },
+          "code": {
+            "example": "DLX-CP",
+            "type": "string"
+          },
+          "currency": {
+            "default": "INR",
+            "type": "string"
+          },
+          "extraAdultRate": {
+            "example": 1000,
+            "type": "number"
+          },
+          "extraChildRate": {
+            "example": 500,
+            "type": "number"
+          },
+          "freeCancelHours": {
+            "default": 24,
+            "type": "number"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "isPublic": {
+            "description": "False keeps the plan off every OTA",
+            "type": "boolean"
+          },
+          "maxStay": {
+            "type": "number"
+          },
+          "mealPlan": {
+            "default": "EP",
+            "enum": [
+              "EP",
+              "CP",
+              "MAP",
+              "AP"
+            ],
+            "type": "string"
+          },
+          "minStay": {
+            "default": 1,
+            "type": "number"
+          },
+          "name": {
+            "example": "Bed & Breakfast",
+            "type": "string"
+          },
+          "penaltyPercent": {
+            "type": "number"
+          },
+          "roomTypeId": {
+            "type": "string"
+          },
+          "taxInclusive": {
+            "type": "boolean"
+          },
+          "taxPercent": {
+            "example": 12,
+            "type": "number"
+          }
+        },
+        "type": "object"
+      },
       "UpdateRoleDto": {
         "properties": {
           "description": {
@@ -8945,6 +9361,10 @@
             "example": "204",
             "type": "string"
           },
+          "roomTypeId": {
+            "description": "Sellable room type this room belongs to",
+            "type": "string"
+          },
           "status": {
             "enum": [
               "available",
@@ -9017,6 +9437,58 @@
         "required": [
           "status"
         ],
+        "type": "object"
+      },
+      "UpdateRoomTypeDto": {
+        "properties": {
+          "amenities": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "baseOccupancy": {
+            "default": 2,
+            "type": "number"
+          },
+          "bedType": {
+            "example": "King",
+            "type": "string"
+          },
+          "code": {
+            "example": "DLX",
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "extraBeds": {
+            "type": "number"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "maxAdults": {
+            "type": "number"
+          },
+          "maxChildren": {
+            "type": "number"
+          },
+          "maxOccupancy": {
+            "default": 2,
+            "type": "number"
+          },
+          "name": {
+            "example": "Deluxe Room",
+            "type": "string"
+          },
+          "sizeSqft": {
+            "type": "number"
+          },
+          "sortOrder": {
+            "type": "number"
+          }
+        },
         "type": "object"
       },
       "UpdateRosterDto": {
@@ -13269,6 +13741,609 @@
         "summary": "Close or reconcile a handover, recording counted cash",
         "tags": [
           "Cashier Portal"
+        ]
+      }
+    },
+    "/channel-manager/channels": {
+      "get": {
+        "operationId": "ChannelManagerController_listChannels",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Every channel, with how far its integration actually is",
+        "tags": [
+          "Channel Manager"
+        ]
+      }
+    },
+    "/channel-manager/connections": {
+      "get": {
+        "operationId": "ChannelManagerController_listConnections",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "This hotel's connections — never returns credentials",
+        "tags": [
+          "Channel Manager"
+        ]
+      }
+    },
+    "/channel-manager/connections/{code}/connect": {
+      "post": {
+        "operationId": "ChannelManagerController_connect",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConnectChannelDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Connect this hotel. Set useOrganizationCredentials to inherit the group's.",
+        "tags": [
+          "Channel Manager"
+        ]
+      }
+    },
+    "/channel-manager/connections/{code}/disconnect": {
+      "post": {
+        "operationId": "ChannelManagerController_disconnect",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Clears credentials; mappings are kept for reconnecting",
+        "tags": [
+          "Channel Manager"
+        ]
+      }
+    },
+    "/channel-manager/connections/{code}/readiness": {
+      "get": {
+        "operationId": "ChannelManagerController_readiness",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "What still blocks this channel from syncing",
+        "tags": [
+          "Channel Manager"
+        ]
+      }
+    },
+    "/channel-manager/connections/{code}/sync": {
+      "post": {
+        "operationId": "ChannelManagerController_triggerSync",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TriggerSyncDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Queues a sync. Work happens in the background, not in this request.",
+        "tags": [
+          "Channel Manager"
+        ]
+      }
+    },
+    "/channel-manager/connections/{code}/sync-enabled": {
+      "post": {
+        "operationId": "ChannelManagerController_setSyncEnabled",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetSyncEnabledDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Channel Manager"
+        ]
+      }
+    },
+    "/channel-manager/connections/{code}/test": {
+      "post": {
+        "operationId": "ChannelManagerController_test",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Channel Manager"
+        ]
+      }
+    },
+    "/channel-manager/connections/{code}/webhook": {
+      "get": {
+        "operationId": "ChannelManagerController_webhookSetup",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Webhook URL and signing secret for this channel",
+        "tags": [
+          "Channel Manager"
+        ]
+      }
+    },
+    "/channel-manager/connections/{code}/webhook/rotate": {
+      "post": {
+        "operationId": "ChannelManagerController_rotateWebhook",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Issue a new signing secret (old deliveries stop verifying)",
+        "tags": [
+          "Channel Manager"
+        ]
+      }
+    },
+    "/channel-manager/mappings/{code}": {
+      "get": {
+        "operationId": "ChannelManagerController_workspace",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Our catalogue beside theirs, with current links",
+        "tags": [
+          "Channel Manager"
+        ]
+      },
+      "post": {
+        "operationId": "ChannelManagerController_setMapping",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetMappingDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Channel Manager"
+        ]
+      }
+    },
+    "/channel-manager/mappings/{code}/{kind}/{internalId}": {
+      "delete": {
+        "operationId": "ChannelManagerController_removeMapping",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "internalId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Channel Manager"
+        ]
+      }
+    },
+    "/channel-manager/organization/{code}/connect": {
+      "post": {
+        "operationId": "ChannelManagerController_connectOrganization",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConnectOrganizationDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Store shared credentials for an organization",
+        "tags": [
+          "Channel Manager"
+        ]
+      }
+    },
+    "/channel-manager/overview": {
+      "get": {
+        "operationId": "ChannelManagerController_overview",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Dashboard summary",
+        "tags": [
+          "Channel Manager"
+        ]
+      }
+    },
+    "/channel-manager/reservations": {
+      "get": {
+        "operationId": "ChannelManagerController_listReservations",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "status",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Channel Manager"
+        ]
+      }
+    },
+    "/channel-manager/sync-jobs/{id}/retry": {
+      "post": {
+        "operationId": "ChannelManagerController_retryJob",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Channel Manager"
+        ]
+      }
+    },
+    "/channel-manager/sync-logs": {
+      "get": {
+        "operationId": "ChannelManagerController_listLogs",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "channelId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Channel Manager"
+        ]
+      }
+    },
+    "/channel-manager/webhook-failures": {
+      "get": {
+        "operationId": "ChannelManagerController_webhookFailures",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Channel Manager"
+        ]
+      }
+    },
+    "/channel-manager/webhooks/{code}": {
+      "post": {
+        "operationId": "ChannelManagerPublicController_receiveWebhook",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "OTA webhook receiver (signature-authenticated)",
+        "tags": [
+          "Channel Manager"
         ]
       }
     },
@@ -19323,6 +20398,33 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "Include unfinished work from earlier days",
+            "in": "query",
+            "name": "carryOver",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "dateFrom",
+            "required": false,
+            "schema": {
+              "example": "2026-08-01",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "dateTo",
+            "required": false,
+            "schema": {
+              "example": "2026-08-31",
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -19688,6 +20790,33 @@
             "name": "mine",
             "required": false,
             "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Include unfinished work from earlier days",
+            "in": "query",
+            "name": "carryOver",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "dateFrom",
+            "required": false,
+            "schema": {
+              "example": "2026-08-01",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "dateTo",
+            "required": false,
+            "schema": {
+              "example": "2026-08-31",
               "type": "string"
             }
           }
@@ -30475,6 +31604,478 @@
         ]
       }
     },
+    "/rates/calendar": {
+      "get": {
+        "operationId": "RatesController_getRateRange",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "ratePlanId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "from",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "to",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Nightly prices for one plan; falls back to the plan rate",
+        "tags": [
+          "Rates & Inventory"
+        ]
+      }
+    },
+    "/rates/calendar/bulk": {
+      "post": {
+        "operationId": "RatesController_bulkSetRates",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BulkRateDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Price a date range, optionally only on chosen weekdays",
+        "tags": [
+          "Rates & Inventory"
+        ]
+      }
+    },
+    "/rates/inventory": {
+      "get": {
+        "operationId": "RatesController_getInventory",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "roomTypeId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "from",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "to",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Allotment, sold and restrictions per night",
+        "tags": [
+          "Rates & Inventory"
+        ]
+      }
+    },
+    "/rates/inventory/bulk": {
+      "post": {
+        "operationId": "RatesController_bulkInventory",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BulkInventoryDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Adjust allotment or close out a date range",
+        "tags": [
+          "Rates & Inventory"
+        ]
+      }
+    },
+    "/rates/inventory/reconcile": {
+      "post": {
+        "operationId": "RatesController_reconcile",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "from",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "to",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "apply",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Compare recorded sold counts against the bookings table",
+        "tags": [
+          "Rates & Inventory"
+        ]
+      }
+    },
+    "/rates/plans": {
+      "get": {
+        "operationId": "RatesController_findRatePlans",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "roomTypeId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Rates & Inventory"
+        ]
+      },
+      "post": {
+        "operationId": "RatesController_createRatePlan",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRatePlanDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Rates & Inventory"
+        ]
+      }
+    },
+    "/rates/plans/{id}": {
+      "patch": {
+        "operationId": "RatesController_updateRatePlan",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRatePlanDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Rates & Inventory"
+        ]
+      }
+    },
+    "/rates/quote": {
+      "get": {
+        "operationId": "RatesController_quote",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "ratePlanId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "checkIn",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "checkOut",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "adults",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "children",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Price a stay — the same maths the OTA totals are checked against",
+        "tags": [
+          "Rates & Inventory"
+        ]
+      }
+    },
+    "/rates/room-types": {
+      "get": {
+        "operationId": "RatesController_findRoomTypes",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "includeInactive",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Sellable room categories for this hotel",
+        "tags": [
+          "Rates & Inventory"
+        ]
+      },
+      "post": {
+        "operationId": "RatesController_createRoomType",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRoomTypeDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Rates & Inventory"
+        ]
+      }
+    },
+    "/rates/room-types/{id}": {
+      "patch": {
+        "operationId": "RatesController_updateRoomType",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRoomTypeDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Rates & Inventory"
+        ]
+      }
+    },
+    "/rates/room-types/{id}/retire": {
+      "post": {
+        "operationId": "RatesController_retireRoomType",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Stop selling this category (never deletes)",
+        "tags": [
+          "Rates & Inventory"
+        ]
+      }
+    },
     "/recipes": {
       "get": {
         "operationId": "RecipesController_findAll",
@@ -37898,6 +39499,24 @@
             "name": "assignedToUserId",
             "required": false,
             "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "dateFrom",
+            "required": false,
+            "schema": {
+              "example": "2026-08-01",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "dateTo",
+            "required": false,
+            "schema": {
+              "example": "2026-08-31",
               "type": "string"
             }
           }
