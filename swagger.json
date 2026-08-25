@@ -5695,6 +5695,14 @@
             "description": "Whether a supervisor must sign this off",
             "type": "boolean"
           },
+          "supervisorId": {
+            "description": "User UUID of the supervisor signing this off",
+            "type": "string"
+          },
+          "supervisorName": {
+            "description": "Cached display name for supervisorId",
+            "type": "string"
+          },
           "tags": {
             "description": "Comma-separated tags",
             "type": "string"
@@ -9988,6 +9996,14 @@
           "supervisorApproval": {
             "description": "Whether supervisor has approved completion",
             "type": "boolean"
+          },
+          "supervisorId": {
+            "description": "User UUID of the supervisor signing this off",
+            "type": "string"
+          },
+          "supervisorName": {
+            "description": "Cached display name for supervisorId",
+            "type": "string"
           },
           "tags": {
             "type": "string"
