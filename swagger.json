@@ -200,6 +200,7 @@
             "enum": [
               "super_admin",
               "admin",
+              "organization_admin",
               "general_manager",
               "receptionist",
               "housekeeping",
@@ -438,6 +439,7 @@
             "enum": [
               "super_admin",
               "admin",
+              "organization_admin",
               "general_manager",
               "receptionist",
               "housekeeping",
@@ -3938,10 +3940,45 @@
         ],
         "type": "object"
       },
+      "CreateOrganizationAdminDto": {
+        "properties": {
+          "email": {
+            "example": "owner@acme-hotels.com",
+            "type": "string"
+          },
+          "name": {
+            "example": "Priya Sharma",
+            "type": "string"
+          },
+          "password": {
+            "description": "Temporary password — tell them to change it after first login",
+            "minLength": 8,
+            "type": "string"
+          },
+          "phone": {
+            "example": "+91-9999999999",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "email",
+          "password"
+        ],
+        "type": "object"
+      },
       "CreateOrganizationDto": {
         "properties": {
           "address": {
             "type": "string"
+          },
+          "admin": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CreateOrganizationAdminDto"
+              }
+            ],
+            "description": "Create this organization's admin in the same call. Omit to add one later."
           },
           "city": {
             "example": "Mumbai",
@@ -3958,6 +3995,12 @@
           "gstNumber": {
             "example": "27ABCDE1234F1Z5",
             "type": "string"
+          },
+          "hotelLimit": {
+            "default": 1,
+            "description": "How many hotels this organization's own admin can self-create. Platform-owner-controlled; raise it later from the Organizations page as the relationship grows. Does not limit the platform owner creating hotels directly.",
+            "minimum": 1,
+            "type": "number"
           },
           "isActive": {
             "default": true,
@@ -6225,6 +6268,10 @@
             "example": "John Doe",
             "type": "string"
           },
+          "organizationId": {
+            "description": "Owning organization — required for role=organization_admin, the scope every org-scoping check reads from",
+            "type": "string"
+          },
           "password": {
             "example": "password123",
             "minLength": 6,
@@ -6249,6 +6296,7 @@
             "enum": [
               "super_admin",
               "admin",
+              "organization_admin",
               "general_manager",
               "receptionist",
               "housekeeping",
@@ -6894,6 +6942,7 @@
             "enum": [
               "super_admin",
               "admin",
+              "organization_admin",
               "general_manager",
               "receptionist",
               "housekeeping",
@@ -7680,6 +7729,23 @@
             "type": "string"
           }
         },
+        "type": "object"
+      },
+      "UpdateBroadcastSenderDto": {
+        "properties": {
+          "fromEmail": {
+            "example": "notices@moonandmarsresort.com",
+            "type": "string"
+          },
+          "fromName": {
+            "example": "Moon & Mars Resort",
+            "type": "string"
+          }
+        },
+        "required": [
+          "fromName",
+          "fromEmail"
+        ],
         "type": "object"
       },
       "UpdateCallLogDto": {
@@ -9063,6 +9129,14 @@
           "address": {
             "type": "string"
           },
+          "admin": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CreateOrganizationAdminDto"
+              }
+            ],
+            "description": "Create this organization's admin in the same call. Omit to add one later."
+          },
           "city": {
             "example": "Mumbai",
             "type": "string"
@@ -9078,6 +9152,12 @@
           "gstNumber": {
             "example": "27ABCDE1234F1Z5",
             "type": "string"
+          },
+          "hotelLimit": {
+            "default": 1,
+            "description": "How many hotels this organization's own admin can self-create. Platform-owner-controlled; raise it later from the Organizations page as the relationship grows. Does not limit the platform owner creating hotels directly.",
+            "minimum": 1,
+            "type": "number"
           },
           "isActive": {
             "default": true,
@@ -10211,6 +10291,7 @@
             "enum": [
               "super_admin",
               "admin",
+              "organization_admin",
               "general_manager",
               "receptionist",
               "housekeeping",
@@ -10370,6 +10451,28 @@
           }
         },
         "type": "object"
+      },
+      "UpsertOrganizationAdminDto": {
+        "properties": {
+          "email": {
+            "example": "owner@acme-hotels.com",
+            "type": "string"
+          },
+          "name": {
+            "example": "Priya Sharma",
+            "type": "string"
+          },
+          "password": {
+            "description": "Set to reset their password. Leave out to keep it unchanged (on an existing admin).",
+            "minLength": 8,
+            "type": "string"
+          },
+          "phone": {
+            "example": "+91-9999999999",
+            "type": "string"
+          }
+        },
+        "type": "object"
       }
     },
     "securitySchemes": {
@@ -10417,9 +10520,9 @@
             "bearer": []
           }
         ],
-        "summary": "Per-type counts of soft-deleted rows",
+        "summary": "Per-type counts of soft-deleted rows, scoped to the current hotel",
         "tags": [
-          "Recycle Bin (Developer)"
+          "Recycle Bin (Admin)"
         ]
       }
     },
@@ -10446,9 +10549,9 @@
             "bearer": []
           }
         ],
-        "summary": "List soft-deleted rows of one entity type",
+        "summary": "List soft-deleted rows of one entity type, scoped to the current hotel",
         "tags": [
-          "Recycle Bin (Developer)"
+          "Recycle Bin (Admin)"
         ]
       }
     },
@@ -10494,7 +10597,7 @@
         ],
         "summary": "Permanently delete a soft-deleted row (cascades for rooms)",
         "tags": [
-          "Recycle Bin (Developer)"
+          "Recycle Bin (Admin)"
         ]
       }
     },
@@ -10531,7 +10634,7 @@
         ],
         "summary": "Dry-run preview — counts cascade children (rooms) and blocking children (every other type)",
         "tags": [
-          "Recycle Bin (Developer)"
+          "Recycle Bin (Admin)"
         ]
       }
     },
@@ -10568,7 +10671,7 @@
         ],
         "summary": "Restore a soft-deleted row (flip isActive back to true)",
         "tags": [
-          "Recycle Bin (Developer)"
+          "Recycle Bin (Admin)"
         ]
       }
     },
@@ -21163,11 +21266,17 @@
         "operationId": "HotelsController_findAllHotels",
         "parameters": [
           {
+            "description": "Filter to one organization's hotels",
+            "in": "query",
+            "name": "organizationId",
+            "required": false,
+            "schema": {}
+          },
+          {
             "in": "query",
             "name": "page",
             "required": false,
             "schema": {
-              "default": 1,
               "example": 1,
               "type": "number"
             }
@@ -21177,7 +21286,6 @@
             "name": "limit",
             "required": false,
             "schema": {
-              "default": 20,
               "example": 20,
               "type": "number"
             }
@@ -21207,102 +21315,6 @@
                 "ASC",
                 "DESC"
               ],
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "hotelId",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "department",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "role",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "excludeRole",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "status",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "category",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "date",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "staffId",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "month",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "year",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "type",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "priority",
-            "required": false,
-            "schema": {
               "type": "string"
             }
           }
@@ -21345,6 +21357,26 @@
             "bearer": []
           }
         ],
+        "tags": [
+          "Hotels"
+        ]
+      }
+    },
+    "/hotels/my-organization": {
+      "get": {
+        "operationId": "HotelsController_getMyOrganization",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "The caller's own organization (id, name) — lets the Hotel form pre-fill/lock Organization for an org admin",
         "tags": [
           "Hotels"
         ]
@@ -29455,6 +29487,72 @@
         ]
       }
     },
+    "/notifications/broadcast/sender": {
+      "delete": {
+        "operationId": "NotificationsController_resetBroadcastSender",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Reset the broadcast sender back to default (org admin: platform default; platform owner: the env-configured default)",
+        "tags": [
+          "Notifications"
+        ]
+      },
+      "get": {
+        "operationId": "NotificationsController_getBroadcastSender",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "The caller's current broadcast sender identity (From name/email) and whether they can change it",
+        "tags": [
+          "Notifications"
+        ]
+      },
+      "put": {
+        "operationId": "NotificationsController_setBroadcastSender",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBroadcastSenderDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Set the broadcast sender identity — the platform owner sets the platform default, an organization admin sets their own organization's override",
+        "tags": [
+          "Notifications"
+        ]
+      }
+    },
     "/notifications/token": {
       "post": {
         "operationId": "NotificationsController_saveToken",
@@ -30331,6 +30429,72 @@
           }
         ],
         "summary": "Update organization",
+        "tags": [
+          "Organizations"
+        ]
+      }
+    },
+    "/organizations/{id}/admin": {
+      "get": {
+        "operationId": "OrganizationsController_getAdmin",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get this organization's admin (null if none minted yet)",
+        "tags": [
+          "Organizations"
+        ]
+      },
+      "put": {
+        "operationId": "OrganizationsController_upsertAdmin",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertOrganizationAdminDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Create or update this organization's admin — password only changes if one is sent",
         "tags": [
           "Organizations"
         ]
@@ -41131,7 +41295,7 @@
             "bearer": []
           }
         ],
-        "summary": "List users awaiting registration approval (developer only)",
+        "summary": "List users awaiting registration approval (platform owner only)",
         "tags": [
           "Users"
         ]
@@ -41283,7 +41447,7 @@
             "bearer": []
           }
         ],
-        "summary": "Approve a pending user (developer only)",
+        "summary": "Approve a pending user (platform owner only)",
         "tags": [
           "Users"
         ]
@@ -41351,7 +41515,7 @@
             "bearer": []
           }
         ],
-        "summary": "Reject a pending user registration (developer only)",
+        "summary": "Reject a pending user registration (platform owner only)",
         "tags": [
           "Users"
         ]
