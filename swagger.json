@@ -5520,6 +5520,30 @@
         ],
         "type": "object"
       },
+      "CreateStoreLocationDto": {
+        "properties": {
+          "department": {
+            "example": "Housekeeping",
+            "type": "string"
+          },
+          "description": {
+            "example": "Linen and towels for rooms 101-120",
+            "type": "string"
+          },
+          "isActive": {
+            "example": true,
+            "type": "boolean"
+          },
+          "name": {
+            "example": "Floor 1 Linen Closet",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "type": "object"
+      },
       "CreateStructureDto": {
         "properties": {
           "areaId": {
@@ -9898,6 +9922,27 @@
               "submitted",
               "reviewed"
             ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "UpdateStoreLocationDto": {
+        "properties": {
+          "department": {
+            "example": "Housekeeping",
+            "type": "string"
+          },
+          "description": {
+            "example": "Linen and towels for rooms 101-120",
+            "type": "string"
+          },
+          "isActive": {
+            "example": false,
+            "type": "boolean"
+          },
+          "name": {
+            "example": "Floor 1 Linen Closet",
             "type": "string"
           }
         },
@@ -38179,6 +38224,137 @@
         "summary": "Clear a category — its items are kept and become uncategorised",
         "tags": [
           "Store Items"
+        ]
+      }
+    },
+    "/store/locations": {
+      "get": {
+        "operationId": "DepartmentStoreController_listLocations",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "department",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "activeOnly",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List managed store locations",
+        "tags": [
+          "Department Store"
+        ]
+      },
+      "post": {
+        "operationId": "DepartmentStoreController_createLocation",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateStoreLocationDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Create a store location",
+        "tags": [
+          "Department Store"
+        ]
+      }
+    },
+    "/store/locations/{id}": {
+      "delete": {
+        "operationId": "DepartmentStoreController_removeLocation",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Delete a store location — history is unaffected",
+        "tags": [
+          "Department Store"
+        ]
+      },
+      "patch": {
+        "operationId": "DepartmentStoreController_updateLocation",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateStoreLocationDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Rename, re-describe or retire a store location",
+        "tags": [
+          "Department Store"
         ]
       }
     },
