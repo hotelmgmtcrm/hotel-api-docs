@@ -2102,6 +2102,12 @@
           "beoData": {
             "type": "object"
           },
+          "beoDataList": {
+            "items": {
+              "type": "object"
+            },
+            "type": "array"
+          },
           "beoEnabled": {
             "type": "boolean"
           },
@@ -8293,6 +8299,12 @@
           "beoData": {
             "type": "object"
           },
+          "beoDataList": {
+            "items": {
+              "type": "object"
+            },
+            "type": "array"
+          },
           "beoEnabled": {
             "type": "boolean"
           },
@@ -8743,6 +8755,43 @@
             "description": "Public website URL",
             "example": "https://moonmarsresort.com",
             "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "UpdateItemDto": {
+        "properties": {
+          "category": {
+            "example": "Banquet - Linen",
+            "type": "string"
+          },
+          "currentStock": {
+            "description": "Target on-hand quantity. The difference from the current balance is posted as a stock movement.",
+            "example": 50,
+            "type": "number"
+          },
+          "damagedStock": {
+            "description": "Damaged stock not available for use",
+            "example": 2,
+            "type": "number"
+          },
+          "minimumStock": {
+            "description": "Reorder level — alert below this",
+            "example": 10,
+            "type": "number"
+          },
+          "name": {
+            "example": "Bedsheet — Single",
+            "type": "string"
+          },
+          "unit": {
+            "example": "pcs",
+            "type": "string"
+          },
+          "unitPrice": {
+            "description": "Per-unit price in INR",
+            "example": 250,
+            "type": "number"
           }
         },
         "type": "object"
@@ -17425,6 +17474,24 @@
             "description": "Enquiry date range end (YYYY-MM-DD)",
             "in": "query",
             "name": "enquiryDateTo",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Created-at range start (YYYY-MM-DD)",
+            "in": "query",
+            "name": "createdFrom",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Created-at range end (YYYY-MM-DD)",
+            "in": "query",
+            "name": "createdTo",
             "required": false,
             "schema": {
               "type": "string"
@@ -38222,6 +38289,45 @@
           }
         ],
         "summary": "Clear a category — its items are kept and become uncategorised",
+        "tags": [
+          "Store Items"
+        ]
+      }
+    },
+    "/store/items/{id}": {
+      "patch": {
+        "operationId": "ItemsController_update",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateItemDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Edit a catalogue item. A changed currentStock is posted as a stock movement, not written behind the ledger.",
         "tags": [
           "Store Items"
         ]
