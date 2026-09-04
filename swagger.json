@@ -20640,6 +20640,15 @@
             }
           },
           {
+            "description": "Return only each room's current record",
+            "in": "query",
+            "name": "latestPerRoom",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "dateFrom",
             "required": false,
@@ -21028,6 +21037,15 @@
             "description": "Include unfinished work from earlier days",
             "in": "query",
             "name": "carryOver",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Return only each room's current record",
+            "in": "query",
+            "name": "latestPerRoom",
             "required": false,
             "schema": {
               "type": "string"
