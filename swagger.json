@@ -963,6 +963,10 @@
             ],
             "type": "string"
           },
+          "hotelId": {
+            "description": "Hotel UUID",
+            "type": "string"
+          },
           "location": {
             "example": "Reception",
             "type": "string"
@@ -1111,6 +1115,9 @@
             "type": "number"
           },
           "description": {
+            "type": "string"
+          },
+          "hotelId": {
             "type": "string"
           },
           "name": {
@@ -2007,6 +2014,9 @@
             "type": "string"
           },
           "email": {
+            "type": "string"
+          },
+          "hotelId": {
             "type": "string"
           },
           "name": {
@@ -3916,31 +3926,63 @@
       },
       "CreateOrderDto": {
         "properties": {
+          "customerName": {
+            "description": "Customer Name",
+            "type": "string"
+          },
+          "customerPhone": {
+            "description": "Customer Phone",
+            "type": "string"
+          },
+          "discount": {
+            "description": "Discount",
+            "type": "number"
+          },
           "guestId": {
             "description": "Linked guest UUID — for room-charge orders",
             "type": "string"
           },
+          "hotelId": {
+            "description": "Hotel UUID",
+            "type": "string"
+          },
           "items": {
             "description": "Order line items",
-            "example": [
-              {
-                "name": "Butter Chicken",
-                "price": 350,
-                "quantity": 1,
-                "recipeId": "<uuid>"
-              }
-            ],
             "items": {
               "type": "string"
             },
             "type": "array"
           },
+          "notes": {
+            "description": "Special instructions / cooking notes",
+            "type": "string"
+          },
+          "orderType": {
+            "description": "Order type: dine_in, takeaway, delivery, room_service",
+            "type": "string"
+          },
+          "roomNumber": {
+            "description": "Room Number (for room delivery/charge)",
+            "type": "string"
+          },
+          "subtotal": {
+            "description": "Subtotal",
+            "type": "number"
+          },
           "tableId": {
             "description": "Table UUID — required for dine-in",
             "type": "string"
           },
+          "taxAmount": {
+            "description": "Tax Amount",
+            "type": "number"
+          },
+          "totalAmount": {
+            "description": "Total Amount",
+            "type": "number"
+          },
           "waiter": {
-            "description": "Waiter staff name (cached)",
+            "description": "Waiter staff name",
             "type": "string"
           }
         },
@@ -4052,6 +4094,10 @@
       },
       "CreatePODto": {
         "properties": {
+          "hotelId": {
+            "description": "Hotel UUID",
+            "type": "string"
+          },
           "items": {
             "description": "PO line items with prices",
             "example": [
@@ -4510,14 +4556,21 @@
       },
       "CreateRecipeDto": {
         "properties": {
-          "category": {
-            "enum": [
-              "starter",
-              "main_course",
-              "dessert",
-              "beverage",
-              "side"
+          "addons": {
+            "description": "Add-ons list",
+            "example": [
+              {
+                "name": "Extra Butter",
+                "price": 30
+              }
             ],
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "category": {
+            "example": "Main Course",
             "type": "string"
           },
           "costPrice": {
@@ -4527,6 +4580,14 @@
           },
           "cuisine": {
             "example": "North Indian",
+            "type": "string"
+          },
+          "hotelId": {
+            "description": "Hotel UUID",
+            "type": "string"
+          },
+          "imageUrl": {
+            "example": "https://images.unsplash.com/...",
             "type": "string"
           },
           "ingredients": {
@@ -4547,13 +4608,60 @@
             "description": "Step-by-step preparation instructions",
             "type": "string"
           },
+          "isVeg": {
+            "default": "veg",
+            "enum": [
+              "veg",
+              "non_veg",
+              "egg",
+              "vegan"
+            ],
+            "type": "string"
+          },
+          "itemCode": {
+            "example": "BC01",
+            "type": "string"
+          },
+          "kitchenStation": {
+            "example": "Main Kitchen",
+            "type": "string"
+          },
           "name": {
             "example": "Butter Chicken",
             "type": "string"
           },
+          "portionSize": {
+            "example": "250g",
+            "type": "string"
+          },
+          "preparationTimeMin": {
+            "example": 15,
+            "type": "number"
+          },
           "sellingPrice": {
             "description": "Menu price in INR",
             "example": 350,
+            "type": "number"
+          },
+          "variants": {
+            "description": "Variants list",
+            "example": [
+              {
+                "name": "Half",
+                "price": 180
+              },
+              {
+                "name": "Full",
+                "price": 320
+              }
+            ],
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "yield": {
+            "example": 1,
             "type": "number"
           }
         },
@@ -5623,6 +5731,10 @@
             "example": 4,
             "type": "number"
           },
+          "hotelId": {
+            "description": "Hotel UUID",
+            "type": "string"
+          },
           "section": {
             "enum": [
               "indoor",
@@ -5635,6 +5747,11 @@
           },
           "tableNumber": {
             "example": "T-04",
+            "type": "string"
+          },
+          "type": {
+            "description": "dine_in, room_service, pool_side, …",
+            "example": "dine_in",
             "type": "string"
           }
         },
@@ -6648,6 +6765,10 @@
             "example": "2026-05-31",
             "type": "string"
           },
+          "hotelId": {
+            "description": "Hotel UUID",
+            "type": "string"
+          },
           "startDate": {
             "description": "Date range start (YYYY-MM-DD)",
             "example": "2026-05-01",
@@ -6859,6 +6980,10 @@
         "required": [
           "reason"
         ],
+        "type": "object"
+      },
+      "PlatformLoginDto": {
+        "properties": {},
         "type": "object"
       },
       "ProcessSalaryDto": {
@@ -7363,6 +7488,14 @@
         ],
         "type": "object"
       },
+      "TestMessagingDto": {
+        "properties": {},
+        "type": "object"
+      },
+      "TestPaymentGatewayDto": {
+        "properties": {},
+        "type": "object"
+      },
       "TestSendDto": {
         "properties": {
           "channel": {
@@ -7387,6 +7520,10 @@
           "channel",
           "message"
         ],
+        "type": "object"
+      },
+      "TestSmtpDto": {
+        "properties": {},
         "type": "object"
       },
       "TicketStatsDto": {
@@ -8220,6 +8357,9 @@
             "type": "string"
           },
           "email": {
+            "type": "string"
+          },
+          "hotelId": {
             "type": "string"
           },
           "name": {
@@ -9273,6 +9413,10 @@
             "type": "string"
           }
         },
+        "type": "object"
+      },
+      "UpdateOrganizationStatusDto": {
+        "properties": {},
         "type": "object"
       },
       "UpdateQuotationDto": {
@@ -11051,7 +11195,6 @@
             "name": "page",
             "required": false,
             "schema": {
-              "default": 1,
               "example": 1,
               "type": "number"
             }
@@ -11061,7 +11204,6 @@
             "name": "limit",
             "required": false,
             "schema": {
-              "default": 20,
               "example": 20,
               "type": "number"
             }
@@ -11091,102 +11233,6 @@
                 "ASC",
                 "DESC"
               ],
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "hotelId",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "department",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "role",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "excludeRole",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "status",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "category",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "date",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "staffId",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "month",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "year",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "type",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "priority",
-            "required": false,
-            "schema": {
               "type": "string"
             }
           }
@@ -11536,6 +11582,100 @@
           }
         ],
         "summary": "Create a banquet menu card",
+        "tags": [
+          "Banquet Menus"
+        ]
+      }
+    },
+    "/banquet-menus/customized": {
+      "get": {
+        "operationId": "BanquetMenusController_listCustomized",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "This hotel's saved Customize Menus",
+        "tags": [
+          "Banquet Menus"
+        ]
+      },
+      "post": {
+        "operationId": "BanquetMenusController_createCustomized",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Save a Customize Menu to the directory",
+        "tags": [
+          "Banquet Menus"
+        ]
+      }
+    },
+    "/banquet-menus/customized/{id}": {
+      "delete": {
+        "operationId": "BanquetMenusController_removeCustomized",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Delete a saved Customize Menu",
+        "tags": [
+          "Banquet Menus"
+        ]
+      },
+      "put": {
+        "operationId": "BanquetMenusController_updateCustomized",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update a saved Customize Menu",
         "tags": [
           "Banquet Menus"
         ]
@@ -12905,7 +13045,7 @@
             "bearer": []
           }
         ],
-        "summary": "Generate a bill from an order (18% tax auto-applied)",
+        "summary": "Bill an order — returns its existing open bill rather than creating a second; tax defaults to the outlet's CGST+SGST",
         "tags": [
           "Bills"
         ]
@@ -12963,7 +13103,7 @@
             "bearer": []
           }
         ],
-        "summary": "Settle (pay) a bill with a payment method",
+        "summary": "Settle (pay) a bill. Records the till that took the payment; `settledAt` keeps the original time of a sale replayed after the till was offline",
         "tags": [
           "Bills"
         ]
@@ -18048,9 +18188,10 @@
             }
           },
           {
+            "description": "Narrow to one facility, e.g. \"Club Lounge\"",
             "in": "query",
             "name": "facility",
-            "required": true,
+            "required": false,
             "schema": {
               "type": "string"
             }
@@ -30611,6 +30752,35 @@
         ]
       }
     },
+    "/orders/{id}/add-items": {
+      "post": {
+        "operationId": "OrdersController_addItems",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Add items to running order and fire incremental KOT",
+        "tags": [
+          "Orders"
+        ]
+      }
+    },
     "/orders/{id}/kot": {
       "post": {
         "operationId": "OrdersController_generateKOT",
@@ -31258,6 +31428,1314 @@
         "summary": "Define a new permission key",
         "tags": [
           "Permissions"
+        ]
+      }
+    },
+    "/platform/auth/login": {
+      "post": {
+        "operationId": "PlatformController_login",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlatformLoginDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Platform"
+        ]
+      }
+    },
+    "/platform/contact-messages": {
+      "get": {
+        "operationId": "PlatformController_getContactMessages",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortOrder",
+            "required": false,
+            "schema": {
+              "default": "DESC",
+              "enum": [
+                "ASC",
+                "DESC"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "department",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "role",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "excludeRole",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "category",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "date",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "staffId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "month",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "year",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "type",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "priority",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Platform"
+        ]
+      }
+    },
+    "/platform/contact-messages/stats": {
+      "get": {
+        "operationId": "PlatformController_getContactMessageStats",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Platform"
+        ]
+      }
+    },
+    "/platform/contact-messages/{id}": {
+      "delete": {
+        "operationId": "PlatformController_deleteContactMessage",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Platform"
+        ]
+      },
+      "get": {
+        "operationId": "PlatformController_getContactMessage",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Platform"
+        ]
+      },
+      "patch": {
+        "operationId": "PlatformController_updateContactMessage",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateContactMessageDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Platform"
+        ]
+      }
+    },
+    "/platform/departments": {
+      "get": {
+        "operationId": "PlatformController_getDepartments",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortOrder",
+            "required": false,
+            "schema": {
+              "default": "DESC",
+              "enum": [
+                "ASC",
+                "DESC"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "department",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "role",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "excludeRole",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "category",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "date",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "staffId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "month",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "year",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "type",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "priority",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Platform"
+        ]
+      }
+    },
+    "/platform/hotels": {
+      "get": {
+        "operationId": "PlatformController_getHotels",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortOrder",
+            "required": false,
+            "schema": {
+              "default": "DESC",
+              "enum": [
+                "ASC",
+                "DESC"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "department",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "role",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "excludeRole",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "category",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "date",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "staffId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "month",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "year",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "type",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "priority",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Platform"
+        ]
+      }
+    },
+    "/platform/master-users": {
+      "get": {
+        "operationId": "PlatformController_getMasterUsers",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortOrder",
+            "required": false,
+            "schema": {
+              "default": "DESC",
+              "enum": [
+                "ASC",
+                "DESC"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "department",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "role",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "excludeRole",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "category",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "date",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "staffId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "month",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "year",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "type",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "priority",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Platform"
+        ]
+      },
+      "post": {
+        "operationId": "PlatformController_createMasterUser",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Platform"
+        ]
+      }
+    },
+    "/platform/master-users/{id}": {
+      "delete": {
+        "operationId": "PlatformController_deleteMasterUser",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Platform"
+        ]
+      },
+      "patch": {
+        "operationId": "PlatformController_updateMasterUser",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Platform"
+        ]
+      }
+    },
+    "/platform/organizations": {
+      "get": {
+        "operationId": "PlatformController_getOrganizations",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Platform"
+        ]
+      },
+      "post": {
+        "operationId": "PlatformController_createOrganization",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrganizationDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Platform"
+        ]
+      }
+    },
+    "/platform/organizations/{id}": {
+      "get": {
+        "operationId": "PlatformController_getOrganization",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Platform"
+        ]
+      },
+      "patch": {
+        "operationId": "PlatformController_updateOrganization",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateOrganizationDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Platform"
+        ]
+      }
+    },
+    "/platform/organizations/{id}/backup": {
+      "get": {
+        "operationId": "PlatformController_downloadBackup",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Platform"
+        ]
+      }
+    },
+    "/platform/organizations/{id}/stats": {
+      "get": {
+        "operationId": "PlatformController_getOrganizationStats",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Platform"
+        ]
+      }
+    },
+    "/platform/organizations/{id}/status": {
+      "patch": {
+        "operationId": "PlatformController_updateStatus",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateOrganizationStatusDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Platform"
+        ]
+      }
+    },
+    "/platform/overview": {
+      "get": {
+        "operationId": "PlatformController_getOverview",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Platform"
+        ]
+      }
+    },
+    "/platform/pending-users": {
+      "get": {
+        "operationId": "PlatformController_getPendingUsers",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortOrder",
+            "required": false,
+            "schema": {
+              "default": "DESC",
+              "enum": [
+                "ASC",
+                "DESC"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "department",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "role",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "excludeRole",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "category",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "date",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "staffId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "month",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "year",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "type",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "priority",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Platform"
+        ]
+      }
+    },
+    "/platform/test-database-connection": {
+      "post": {
+        "operationId": "PlatformController_testDatabaseConnection",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Platform"
+        ]
+      }
+    },
+    "/platform/test-messaging": {
+      "post": {
+        "operationId": "PlatformController_testMessaging",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TestMessagingDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Platform"
+        ]
+      }
+    },
+    "/platform/test-payment-gateway": {
+      "post": {
+        "operationId": "PlatformController_testPaymentGateway",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TestPaymentGatewayDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Platform"
+        ]
+      }
+    },
+    "/platform/test-smtp": {
+      "post": {
+        "operationId": "PlatformController_testSmtp",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TestSmtpDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Platform"
+        ]
+      }
+    },
+    "/platform/test-storage-connection": {
+      "post": {
+        "operationId": "PlatformController_testStorageConnection",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Platform"
+        ]
+      }
+    },
+    "/platform/users/{id}/approve": {
+      "post": {
+        "operationId": "PlatformController_approveUser",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApproveUserDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Platform"
+        ]
+      }
+    },
+    "/platform/users/{id}/reject": {
+      "post": {
+        "operationId": "PlatformController_rejectUser",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RejectUserDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Platform"
         ]
       }
     },
@@ -31973,6 +33451,35 @@
             "bearer": []
           }
         ],
+        "tags": [
+          "Purchase Requisitions"
+        ]
+      }
+    },
+    "/purchase/requisitions/{id}/status": {
+      "patch": {
+        "operationId": "PRController_setStatus",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Set a requisition status (approved / rejected / pending)",
         "tags": [
           "Purchase Requisitions"
         ]
@@ -32786,7 +34293,6 @@
             "name": "page",
             "required": false,
             "schema": {
-              "default": 1,
               "example": 1,
               "type": "number"
             }
@@ -32796,7 +34302,6 @@
             "name": "limit",
             "required": false,
             "schema": {
-              "default": 20,
               "example": 20,
               "type": "number"
             }
@@ -32826,102 +34331,6 @@
                 "ASC",
                 "DESC"
               ],
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "hotelId",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "department",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "role",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "excludeRole",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "status",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "category",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "date",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "staffId",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "month",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "year",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "type",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "priority",
-            "required": false,
-            "schema": {
               "type": "string"
             }
           }
@@ -32964,6 +34373,89 @@
             "bearer": []
           }
         ],
+        "tags": [
+          "Recipes"
+        ]
+      }
+    },
+    "/recipes/{id}": {
+      "delete": {
+        "operationId": "RecipesController_remove",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Delete a recipe",
+        "tags": [
+          "Recipes"
+        ]
+      },
+      "get": {
+        "operationId": "RecipesController_findOne",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get a single recipe by ID",
+        "tags": [
+          "Recipes"
+        ]
+      },
+      "patch": {
+        "operationId": "RecipesController_update",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update recipe details",
         "tags": [
           "Recipes"
         ]
@@ -33150,6 +34642,251 @@
         "summary": "Get a previously generated report by ID",
         "tags": [
           "Reports"
+        ]
+      }
+    },
+    "/restaurant/cash-sessions/close": {
+      "post": {
+        "operationId": "CashSessionsController_close",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Close the shift against a counted amount (Z-report)",
+        "tags": [
+          "Cash Drawer"
+        ]
+      }
+    },
+    "/restaurant/cash-sessions/current": {
+      "get": {
+        "operationId": "CashSessionsController_current",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "This till's open shift with live takings, or null",
+        "tags": [
+          "Cash Drawer"
+        ]
+      }
+    },
+    "/restaurant/cash-sessions/movements": {
+      "post": {
+        "operationId": "CashSessionsController_movement",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Record cash paid in or out of the drawer",
+        "tags": [
+          "Cash Drawer"
+        ]
+      }
+    },
+    "/restaurant/cash-sessions/open": {
+      "post": {
+        "operationId": "CashSessionsController_open",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Open this till's drawer with a starting float",
+        "tags": [
+          "Cash Drawer"
+        ]
+      }
+    },
+    "/restaurant/cash-sessions/tills": {
+      "get": {
+        "operationId": "CashSessionsController_tills",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Every till with an open drawer in this hotel, with live figures",
+        "tags": [
+          "Cash Drawer"
+        ]
+      }
+    },
+    "/restaurant/held-orders": {
+      "get": {
+        "operationId": "HeldOrdersController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Carts parked at any till in this hotel",
+        "tags": [
+          "Held Orders"
+        ]
+      },
+      "post": {
+        "operationId": "HeldOrdersController_hold",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Park a cart so another till can pick it up",
+        "tags": [
+          "Held Orders"
+        ]
+      }
+    },
+    "/restaurant/held-orders/{id}": {
+      "delete": {
+        "operationId": "HeldOrdersController_release",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Release a hold — on resume or on discard",
+        "tags": [
+          "Held Orders"
+        ]
+      }
+    },
+    "/restaurant/pos-settings": {
+      "get": {
+        "operationId": "PosSettingsController_get",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get this hotel's POS & printer settings",
+        "tags": [
+          "POS Settings"
+        ]
+      },
+      "put": {
+        "operationId": "PosSettingsController_save",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Replace this hotel's POS & printer settings",
+        "tags": [
+          "POS Settings"
+        ]
+      }
+    },
+    "/restaurant/print": {
+      "post": {
+        "operationId": "PrintController_print",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Send an ESC/POS job to this hotel’s network printer",
+        "tags": [
+          "Printing"
+        ]
+      }
+    },
+    "/restaurant/print/drawer": {
+      "post": {
+        "operationId": "PrintController_openDrawer",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Fire the cash-drawer kick pulse",
+        "tags": [
+          "Printing"
         ]
       }
     },
@@ -39222,7 +40959,6 @@
             "name": "page",
             "required": false,
             "schema": {
-              "default": 1,
               "example": 1,
               "type": "number"
             }
@@ -39232,7 +40968,6 @@
             "name": "limit",
             "required": false,
             "schema": {
-              "default": 20,
               "example": 20,
               "type": "number"
             }
@@ -39262,102 +40997,6 @@
                 "ASC",
                 "DESC"
               ],
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "hotelId",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "department",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "role",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "excludeRole",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "status",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "category",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "date",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "staffId",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "month",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "year",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "type",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "priority",
-            "required": false,
-            "schema": {
               "type": "string"
             }
           }
@@ -39870,10 +41509,15 @@
         "parameters": [
           {
             "in": "query",
+            "name": "hotelId",
+            "required": false,
+            "schema": {}
+          },
+          {
+            "in": "query",
             "name": "page",
             "required": false,
             "schema": {
-              "default": 1,
               "example": 1,
               "type": "number"
             }
@@ -39883,7 +41527,6 @@
             "name": "limit",
             "required": false,
             "schema": {
-              "default": 20,
               "example": 20,
               "type": "number"
             }
@@ -39913,102 +41556,6 @@
                 "ASC",
                 "DESC"
               ],
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "hotelId",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "department",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "role",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "excludeRole",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "status",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "category",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "date",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "staffId",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "month",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "year",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "type",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "priority",
-            "required": false,
-            "schema": {
               "type": "string"
             }
           }
@@ -40051,6 +41598,131 @@
             "bearer": []
           }
         ],
+        "tags": [
+          "Tables"
+        ]
+      }
+    },
+    "/tables/merge": {
+      "post": {
+        "operationId": "TablesController_mergeTables",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Merge two tables together",
+        "tags": [
+          "Tables"
+        ]
+      }
+    },
+    "/tables/transfer": {
+      "post": {
+        "operationId": "TablesController_transferTable",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Transfer active order from one table to another",
+        "tags": [
+          "Tables"
+        ]
+      }
+    },
+    "/tables/{id}": {
+      "delete": {
+        "operationId": "TablesController_deleteTable",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Delete a table",
+        "tags": [
+          "Tables"
+        ]
+      },
+      "patch": {
+        "operationId": "TablesController_updateTable",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update table details",
+        "tags": [
+          "Tables"
+        ]
+      }
+    },
+    "/tables/{id}/active-order": {
+      "get": {
+        "operationId": "TablesController_getActiveOrder",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get active running order for a table",
         "tags": [
           "Tables"
         ]
@@ -41374,6 +43046,46 @@
           }
         },
         "summary": "Serve a locally stored uploaded file from a subfolder",
+        "tags": [
+          "Uploads"
+        ]
+      }
+    },
+    "/uploads/{org}/{folder}/{filename}": {
+      "get": {
+        "operationId": "UploadsController_serveFileInOrgSubfolder",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "folder",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "filename",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Serve an uploaded file from an organization-scoped subfolder",
         "tags": [
           "Uploads"
         ]
