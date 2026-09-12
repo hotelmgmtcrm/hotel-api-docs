@@ -255,7 +255,12 @@
               "mis_executive",
               "maintenance_staff",
               "restaurant_attendant",
-              "pool_attendant"
+              "pool_attendant",
+              "pos_captain",
+              "pos_cashier",
+              "bartender",
+              "bar_manager",
+              "kitchen_display"
             ],
             "type": "string"
           }
@@ -494,7 +499,12 @@
               "mis_executive",
               "maintenance_staff",
               "restaurant_attendant",
-              "pool_attendant"
+              "pool_attendant",
+              "pos_captain",
+              "pos_cashier",
+              "bartender",
+              "bar_manager",
+              "kitchen_display"
             ],
             "example": "maintenance_manager",
             "type": "string"
@@ -6532,7 +6542,12 @@
               "mis_executive",
               "maintenance_staff",
               "restaurant_attendant",
-              "pool_attendant"
+              "pool_attendant",
+              "pos_captain",
+              "pos_cashier",
+              "bartender",
+              "bar_manager",
+              "kitchen_display"
             ],
             "type": "string"
           },
@@ -7190,7 +7205,12 @@
               "mis_executive",
               "maintenance_staff",
               "restaurant_attendant",
-              "pool_attendant"
+              "pool_attendant",
+              "pos_captain",
+              "pos_cashier",
+              "bartender",
+              "bar_manager",
+              "kitchen_display"
             ],
             "type": "string"
           }
@@ -10626,7 +10646,12 @@
               "mis_executive",
               "maintenance_staff",
               "restaurant_attendant",
-              "pool_attendant"
+              "pool_attendant",
+              "pos_captain",
+              "pos_cashier",
+              "bartender",
+              "bar_manager",
+              "kitchen_display"
             ],
             "type": "string"
           }
