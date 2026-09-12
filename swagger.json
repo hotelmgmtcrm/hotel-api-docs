@@ -3926,6 +3926,14 @@
       },
       "CreateOrderDto": {
         "properties": {
+          "bookingId": {
+            "description": "In-house stay (booking UUID) — room service; the guest must be checked in",
+            "type": "string"
+          },
+          "channel": {
+            "description": "Where the order came from: pos, qr, captain, swiggy, zomato, phone, other",
+            "type": "string"
+          },
           "customerName": {
             "description": "Customer Name",
             "type": "string"
@@ -3937,6 +3945,10 @@
           "discount": {
             "description": "Discount",
             "type": "number"
+          },
+          "externalOrderId": {
+            "description": "A delivery partner's own order number, so the same order is never taken in twice",
+            "type": "string"
           },
           "guestId": {
             "description": "Linked guest UUID — for room-charge orders",
@@ -3959,6 +3971,10 @@
           },
           "orderType": {
             "description": "Order type: dine_in, takeaway, delivery, room_service",
+            "type": "string"
+          },
+          "outletId": {
+            "description": "Outlet UUID — ignored when the table has one; else the hotel's default",
             "type": "string"
           },
           "roomNumber": {
@@ -4573,6 +4589,10 @@
             "example": "Main Course",
             "type": "string"
           },
+          "channels": {
+            "description": "Sales channels; one set false hides the dish there (onlineQR: the QR menu)",
+            "type": "object"
+          },
           "costPrice": {
             "description": "Cost to produce in INR",
             "example": 120,
@@ -4629,6 +4649,13 @@
           "name": {
             "example": "Butter Chicken",
             "type": "string"
+          },
+          "outletIds": {
+            "description": "Outlets that sell it; empty = every outlet",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
           },
           "portionSize": {
             "example": "250g",
@@ -5735,6 +5762,10 @@
             "description": "Hotel UUID",
             "type": "string"
           },
+          "outletId": {
+            "description": "Outlet UUID; the hotel's default outlet when left out",
+            "type": "string"
+          },
           "section": {
             "enum": [
               "indoor",
@@ -6635,6 +6666,10 @@
           },
           "hotelId": {
             "description": "Hotel UUID — defaults to caller's currentHotelId",
+            "type": "string"
+          },
+          "itemId": {
+            "description": "The store item this came out of — linked, the quantity leaves the shelf",
             "type": "string"
           },
           "itemName": {
@@ -10989,6 +11024,15 @@
             }
           },
           {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "department",
             "required": false,
@@ -11862,6 +11906,15 @@
             }
           },
           {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "department",
             "required": false,
@@ -12049,6 +12102,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -12407,6 +12469,15 @@
             }
           },
           {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "department",
             "required": false,
@@ -12613,6 +12684,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -12929,6 +13009,15 @@
             }
           },
           {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "department",
             "required": false,
@@ -13074,7 +13163,36 @@
             "bearer": []
           }
         ],
-        "summary": "Apply a discount to a bill",
+        "summary": "Apply a discount to a bill; above the outlet's limit it needs an approvalToken",
+        "tags": [
+          "Bills"
+        ]
+      }
+    },
+    "/bills/{id}/reprint": {
+      "post": {
+        "operationId": "BillsController_reprint",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "A bill with its order's lines, for printing again. A settled bill's reprint is recorded, and needs an approvalToken when the outlet requires approval for reprints.",
         "tags": [
           "Bills"
         ]
@@ -13103,7 +13221,7 @@
             "bearer": []
           }
         ],
-        "summary": "Settle (pay) a bill. Records the till that took the payment; `settledAt` keeps the original time of a sale replayed after the till was offline",
+        "summary": "Settle (pay) a bill: `paymentMethod` pays it all one way, or `payments` [{ method, amount, reference? }] splits it — the amounts must add up to the bill. A room_charge tender goes on an in-house guest's folio (`bookingId`, `roomNumber`). Records the till that took the payment; `settledAt` keeps the original time of a sale replayed after the till was offline. Settling a paid bill returns it unchanged.",
         "tags": [
           "Bills"
         ]
@@ -13166,6 +13284,15 @@
                 "ASC",
                 "DESC"
               ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
               "type": "string"
             }
           },
@@ -13422,6 +13549,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -13928,6 +14064,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -15867,6 +16012,15 @@
             }
           },
           {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "department",
             "required": false,
@@ -16144,6 +16298,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -16451,6 +16614,15 @@
             }
           },
           {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "department",
             "required": false,
@@ -16741,6 +16913,15 @@
             }
           },
           {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "department",
             "required": false,
@@ -17021,6 +17202,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -17315,6 +17505,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -18100,6 +18299,15 @@
             }
           },
           {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "department",
             "required": false,
@@ -18351,6 +18559,15 @@
             }
           },
           {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "department",
             "required": false,
@@ -18576,6 +18793,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -18829,6 +19055,15 @@
             }
           },
           {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "department",
             "required": false,
@@ -19026,6 +19261,207 @@
         ]
       }
     },
+    "/folio/bookings/{bookingId}": {
+      "get": {
+        "operationId": "FolioController_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "bookingId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "A stay's folio: the charges signed to its rooms, and what is still open",
+        "tags": [
+          "Folio"
+        ]
+      }
+    },
+    "/folio/bookings/{bookingId}/invoice": {
+      "post": {
+        "operationId": "FolioController_invoice",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "bookingId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Bill a stay's open charges now, on one invoice (checkout does this by itself)",
+        "tags": [
+          "Folio"
+        ]
+      }
+    },
+    "/folio/charges/{id}/void": {
+      "post": {
+        "operationId": "FolioController_void",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Void an open room charge posted in error, with the reason",
+        "tags": [
+          "Folio"
+        ]
+      }
+    },
+    "/folio/event-charges/{id}/void": {
+      "post": {
+        "operationId": "FolioController_voidEvent",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Void an open event charge posted in error, with the reason",
+        "tags": [
+          "Folio"
+        ]
+      }
+    },
+    "/folio/events": {
+      "get": {
+        "operationId": "FolioController_events",
+        "parameters": [
+          {
+            "description": "Event or customer name",
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Banquet events that can take charges now (confirmed, yesterday to tomorrow) — the till's list",
+        "tags": [
+          "Folio"
+        ]
+      }
+    },
+    "/folio/events/{eventId}": {
+      "get": {
+        "operationId": "FolioController_event",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "eventId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "An event's account: what the restaurant put on it, open, settled and voided",
+        "tags": [
+          "Folio"
+        ]
+      }
+    },
+    "/folio/in-house": {
+      "get": {
+        "operationId": "FolioController_inHouse",
+        "parameters": [
+          {
+            "description": "Room number (prefix) or guest name",
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Checked-in guests, a row per room — the till's list for room service and charge to room",
+        "tags": [
+          "Folio"
+        ]
+      }
+    },
     "/guest-relations": {
       "get": {
         "operationId": "GuestRelationsController_findAll",
@@ -19080,6 +19516,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -19637,6 +20082,15 @@
             }
           },
           {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "department",
             "required": false,
@@ -19873,6 +20327,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -20227,6 +20690,15 @@
             }
           },
           {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "department",
             "required": false,
@@ -20478,6 +20950,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -20844,6 +21325,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -21253,6 +21743,15 @@
             }
           },
           {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "department",
             "required": false,
@@ -21518,6 +22017,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -22006,6 +22514,15 @@
             }
           },
           {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "department",
             "required": false,
@@ -22274,6 +22791,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -22653,6 +23179,15 @@
             }
           },
           {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "department",
             "required": false,
@@ -22858,6 +23393,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -23224,6 +23768,15 @@
             }
           },
           {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "department",
             "required": false,
@@ -23475,6 +24028,15 @@
             }
           },
           {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "department",
             "required": false,
@@ -23713,6 +24275,15 @@
             }
           },
           {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "department",
             "required": false,
@@ -23926,6 +24497,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -24184,6 +24764,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -24582,6 +25171,15 @@
             }
           },
           {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "department",
             "required": false,
@@ -24787,6 +25385,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -25249,6 +25856,47 @@
         ]
       }
     },
+    "/kitchen/consumption": {
+      "get": {
+        "operationId": "StockConsumptionController_report",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {}
+          },
+          {
+            "description": "YYYY-MM-DD (default: today)",
+            "in": "query",
+            "name": "to",
+            "required": false,
+            "schema": {}
+          },
+          {
+            "description": "YYYY-MM-DD (default: seven days ago)",
+            "in": "query",
+            "name": "from",
+            "required": false,
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "What the kitchen used out of the store over a stretch of days, what is left, and which dishes sold with nothing mapped",
+        "tags": [
+          "Kitchen consumption"
+        ]
+      }
+    },
     "/kitchen/hygiene": {
       "get": {
         "operationId": "KitchenController_findAllHygieneChecks",
@@ -25304,6 +25952,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -25438,6 +26095,75 @@
         ],
         "tags": [
           "Kitchen"
+        ]
+      }
+    },
+    "/kitchen/kots": {
+      "get": {
+        "operationId": "KitchenTicketsController_list",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {}
+          },
+          {
+            "in": "query",
+            "name": "station",
+            "required": false,
+            "schema": {}
+          },
+          {
+            "description": "served — recently served, to recall",
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "The kitchen screen's tickets: open ones from the last 24 hours, oldest first; status=served for the last 3 hours",
+        "tags": [
+          "Kitchen Display"
+        ]
+      }
+    },
+    "/kitchen/kots/{id}": {
+      "patch": {
+        "operationId": "KitchenTicketsController_setStatus",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Move a ticket: new → preparing → ready → served, or back one step to recall it. The kitchen (kitchen.update) moves tickets; front of house (restaurant.update) may also mark them served.",
+        "tags": [
+          "Kitchen Display"
         ]
       }
     },
@@ -25738,6 +26464,15 @@
             }
           },
           {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "department",
             "required": false,
@@ -25924,6 +26659,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -26164,6 +26908,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -26563,6 +27316,15 @@
             }
           },
           {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "department",
             "required": false,
@@ -26801,6 +27563,15 @@
                 "ASC",
                 "DESC"
               ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
               "type": "string"
             }
           },
@@ -29703,6 +30474,15 @@
             }
           },
           {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "department",
             "required": false,
@@ -30039,6 +30819,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -30419,6 +31208,15 @@
             }
           },
           {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "department",
             "required": false,
@@ -30578,6 +31376,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -30781,6 +31588,35 @@
         ]
       }
     },
+    "/orders/{id}/cancel": {
+      "post": {
+        "operationId": "OrdersController_cancel",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Cancel an unpaid order with a reason. Needs a manager's approval: without one the answer is 403 { code: \"APPROVAL_REQUIRED\" } — get an approvalToken from POST /restaurant/approvals and retry with it.",
+        "tags": [
+          "Orders"
+        ]
+      }
+    },
     "/orders/{id}/kot": {
       "post": {
         "operationId": "OrdersController_generateKOT",
@@ -30833,7 +31669,7 @@
             "bearer": []
           }
         ],
-        "summary": "Update order status",
+        "summary": "Update order status. \"cancelled\" takes a reason and approval, as POST /orders/:id/cancel",
         "tags": [
           "Orders"
         ]
@@ -30894,6 +31730,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -31252,6 +32097,15 @@
             }
           },
           {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "department",
             "required": false,
@@ -31515,6 +32369,15 @@
             }
           },
           {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "department",
             "required": false,
@@ -31762,6 +32625,15 @@
             }
           },
           {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "department",
             "required": false,
@@ -31920,6 +32792,15 @@
             }
           },
           {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "department",
             "required": false,
@@ -32072,6 +32953,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -32475,6 +33365,15 @@
             }
           },
           {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "department",
             "required": false,
@@ -32827,6 +33726,86 @@
         ]
       }
     },
+    "/public/qr/{token}": {
+      "get": {
+        "operationId": "QrPublicController_menu",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "The menu behind a table's or room's QR code, and whether it can take an order now",
+        "tags": [
+          "QR ordering (guests)"
+        ]
+      }
+    },
+    "/public/qr/{token}/orders": {
+      "post": {
+        "operationId": "QrPublicController_place",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "A guest's order: [{ recipeId, quantity, variant?, notes? }], guestName?, guestPhone?, note?. Waits for the staff.",
+        "tags": [
+          "QR ordering (guests)"
+        ]
+      }
+    },
+    "/public/qr/{token}/orders/{id}": {
+      "get": {
+        "operationId": "QrPublicController_status",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Where a guest's order stands: pending, accepted, or rejected with the reason",
+        "tags": [
+          "QR ordering (guests)"
+        ]
+      }
+    },
     "/purchase/grn": {
       "get": {
         "operationId": "GRNController_findAll",
@@ -32882,6 +33861,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -33073,6 +34061,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -33292,6 +34289,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -33540,6 +34546,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -34645,6 +35660,125 @@
         ]
       }
     },
+    "/restaurant/approvals": {
+      "post": {
+        "operationId": "ApprovalsController_approve",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "A manager's PIN in exchange for a 5-minute approval token for one action (cancel_order | discount | reprint | settings), optionally bound to one order/bill (targetId)",
+        "tags": [
+          "POS Approvals"
+        ]
+      }
+    },
+    "/restaurant/approvals/approvers": {
+      "get": {
+        "operationId": "ApprovalsController_approvers",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Managers who can approve at this hotel and have set a POS PIN",
+        "tags": [
+          "POS Approvals"
+        ]
+      }
+    },
+    "/restaurant/approvals/pin": {
+      "get": {
+        "operationId": "ApprovalsController_pinStatus",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Whether the signed-in user has a POS PIN, and can approve here",
+        "tags": [
+          "POS Approvals"
+        ]
+      },
+      "put": {
+        "operationId": "ApprovalsController_setPin",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Set the signed-in user's 4–6 digit POS PIN (empty removes it); needs their account password",
+        "tags": [
+          "POS Approvals"
+        ]
+      }
+    },
+    "/restaurant/audit": {
+      "get": {
+        "operationId": "PosAuditController_list",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "action",
+            "required": false,
+            "schema": {}
+          },
+          {
+            "description": "YYYY-MM-DD, inclusive",
+            "in": "query",
+            "name": "to",
+            "required": false,
+            "schema": {}
+          },
+          {
+            "description": "YYYY-MM-DD",
+            "in": "query",
+            "name": "from",
+            "required": false,
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Cancellations, big discounts, complimentary bills, reprints, wrong PINs — newest first, with totals per action",
+        "tags": [
+          "POS Audit"
+        ]
+      }
+    },
     "/restaurant/cash-sessions/close": {
       "post": {
         "operationId": "CashSessionsController_close",
@@ -34680,6 +35814,26 @@
           }
         ],
         "summary": "This till's open shift with live takings, or null",
+        "tags": [
+          "Cash Drawer"
+        ]
+      }
+    },
+    "/restaurant/cash-sessions/history": {
+      "get": {
+        "operationId": "CashSessionsController_history",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Drawer shifts opened between from and to (YYYY-MM-DD, inclusive), newest first, with their figures",
         "tags": [
           "Cash Drawer"
         ]
@@ -34740,6 +35894,35 @@
           }
         ],
         "summary": "Every till with an open drawer in this hotel, with live figures",
+        "tags": [
+          "Cash Drawer"
+        ]
+      }
+    },
+    "/restaurant/cash-sessions/{id}/report": {
+      "get": {
+        "operationId": "CashSessionsController_report",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "One drawer shift's Z-report: sales, tenders, GST by rate, cancellations and the cash count",
         "tags": [
           "Cash Drawer"
         ]
@@ -34809,6 +35992,125 @@
         "summary": "Release a hold — on resume or on discard",
         "tags": [
           "Held Orders"
+        ]
+      }
+    },
+    "/restaurant/online-orders": {
+      "get": {
+        "operationId": "OnlineOrdersController_list",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "channel",
+            "required": false,
+            "schema": {}
+          },
+          {
+            "description": "YYYY-MM-DD (today when left out)",
+            "in": "query",
+            "name": "date",
+            "required": false,
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "A day's online orders, newest first, with the bill each became",
+        "tags": [
+          "Online orders"
+        ]
+      },
+      "post": {
+        "operationId": "OnlineOrdersController_intake",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Take in an order from a delivery partner: { channel (swiggy|zomato|phone|other), externalOrderId, items[], customerName?, customerPhone?, address?, packingCharge?, prepaid? }. It becomes an ordinary order with its KOTs; prepaid, it is settled under the partner's name. Sending the same partner order again returns the one already taken in.",
+        "tags": [
+          "Online orders"
+        ]
+      }
+    },
+    "/restaurant/outlets": {
+      "get": {
+        "operationId": "OutletsController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "This hotel's outlets (restaurant, bar, room service …), default first",
+        "tags": [
+          "Outlets"
+        ]
+      },
+      "post": {
+        "operationId": "OutletsController_create",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Add an outlet: name, code (1–4 letters/digits, its bill series prefix), type, and optional settings overrides",
+        "tags": [
+          "Outlets"
+        ]
+      }
+    },
+    "/restaurant/outlets/{id}": {
+      "patch": {
+        "operationId": "OutletsController_update",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Change an outlet, close/reopen it, or make it the default",
+        "tags": [
+          "Outlets"
         ]
       }
     },
@@ -34890,6 +36192,227 @@
         ]
       }
     },
+    "/restaurant/qr/codes": {
+      "get": {
+        "operationId": "QrStaffController_codes",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "The hotel's table and room QR codes, and its rooms",
+        "tags": [
+          "QR ordering"
+        ]
+      },
+      "post": {
+        "operationId": "QrStaffController_ensure",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "The code for a table ({ kind: \"table\", tableId }) or a room ({ kind: \"room\", roomId, outletId? }), made on first ask",
+        "tags": [
+          "QR ordering"
+        ]
+      }
+    },
+    "/restaurant/qr/codes/{id}": {
+      "patch": {
+        "operationId": "QrStaffController_setActive",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Switch a code off or on ({ isActive })",
+        "tags": [
+          "QR ordering"
+        ]
+      }
+    },
+    "/restaurant/qr/codes/{id}/rotate": {
+      "post": {
+        "operationId": "QrStaffController_rotate",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Replace the token: the printed code stops working",
+        "tags": [
+          "QR ordering"
+        ]
+      }
+    },
+    "/restaurant/qr/orders": {
+      "get": {
+        "operationId": "QrStaffController_orders",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "QR orders waiting for the staff, and those decided in the last three hours",
+        "tags": [
+          "QR ordering"
+        ]
+      }
+    },
+    "/restaurant/qr/orders/{id}/accept": {
+      "post": {
+        "operationId": "QrStaffController_accept",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Send a QR order to the kitchen — a new round on the table's tab, or a new order",
+        "tags": [
+          "QR ordering"
+        ]
+      }
+    },
+    "/restaurant/qr/orders/{id}/reject": {
+      "post": {
+        "operationId": "QrStaffController_reject",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Turn a QR order down; `reason` is shown to the guest",
+        "tags": [
+          "QR ordering"
+        ]
+      }
+    },
+    "/restaurant/reports/day-end": {
+      "get": {
+        "operationId": "PosReportsController_dayEnd",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Day end (Z-report) for a local day: sales, GST by rate, payments by mode, cancellations, every drawer shift, and what is still open. date = YYYY-MM-DD (today when left out); outletId narrows it to one outlet.",
+        "tags": [
+          "POS Reports"
+        ]
+      }
+    },
+    "/restaurant/reports/owner": {
+      "get": {
+        "operationId": "PosReportsController_ownerSummary",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "The owner's day in one call: every outlet's takings, what is still open, where the orders came from and what sold most. date = YYYY-MM-DD (today when left out).",
+        "tags": [
+          "POS Reports"
+        ]
+      }
+    },
     "/roles": {
       "get": {
         "operationId": "RolesController_findAllRoles",
@@ -34945,6 +36468,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -35280,6 +36812,15 @@
             }
           },
           {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "department",
             "required": false,
@@ -35557,6 +37098,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -36312,6 +37862,15 @@
             }
           },
           {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "department",
             "required": false,
@@ -36500,6 +38059,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -36717,6 +38285,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -37077,6 +38654,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -37566,6 +39152,15 @@
             }
           },
           {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "department",
             "required": false,
@@ -37781,6 +39376,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -38178,6 +39782,15 @@
             }
           },
           {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "department",
             "required": false,
@@ -38452,6 +40065,15 @@
             }
           },
           {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "department",
             "required": false,
@@ -38712,6 +40334,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -39068,6 +40699,15 @@
             }
           },
           {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "department",
             "required": false,
@@ -39282,6 +40922,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -39572,6 +41221,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -40111,6 +41769,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -41253,6 +42920,15 @@
             }
           },
           {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "department",
             "required": false,
@@ -41920,6 +43596,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
@@ -42633,6 +44318,15 @@
             }
           },
           {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "department",
             "required": false,
@@ -43152,6 +44846,15 @@
             }
           },
           {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "department",
             "required": false,
@@ -43594,6 +45297,15 @@
           {
             "in": "query",
             "name": "hotelId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Restaurant lists: only this outlet",
+            "in": "query",
+            "name": "outletId",
             "required": false,
             "schema": {
               "type": "string"
