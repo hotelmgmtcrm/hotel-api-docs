@@ -19461,6 +19461,43 @@
         ]
       }
     },
+    "/folio/activity": {
+      "get": {
+        "operationId": "FolioController_activity",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "from",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "to",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "What has been struck off folios, and what has been merged",
+        "tags": [
+          "Folio"
+        ]
+      }
+    },
     "/folio/bookings/{bookingId}": {
       "get": {
         "operationId": "FolioController_get",
@@ -19553,6 +19590,64 @@
           }
         ],
         "summary": "Bill a stay's open charges now, on one invoice (checkout does this by itself)",
+        "tags": [
+          "Folio"
+        ]
+      }
+    },
+    "/folio/bookings/{bookingId}/merge": {
+      "post": {
+        "operationId": "FolioController_merge",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "bookingId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Move a stay's open lines onto another stay's folio",
+        "tags": [
+          "Folio"
+        ]
+      }
+    },
+    "/folio/bookings/{bookingId}/unmerge": {
+      "post": {
+        "operationId": "FolioController_unmerge",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "bookingId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Send merged lines back to the stay they came from",
         "tags": [
           "Folio"
         ]
@@ -26090,6 +26185,35 @@
           }
         ],
         "summary": "Update invoice status / payment",
+        "tags": [
+          "Invoices"
+        ]
+      }
+    },
+    "/invoices/{id}/reprint": {
+      "post": {
+        "operationId": "InvoicesController_reprint",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Record that this bill was printed again",
         "tags": [
           "Invoices"
         ]
