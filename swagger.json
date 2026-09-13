@@ -2006,6 +2006,11 @@
           "email": {
             "type": "string"
           },
+          "gstNumber": {
+            "description": "GSTIN (15 characters); send an empty string to clear it",
+            "example": "08AABCU9603R1ZM",
+            "type": "string"
+          },
           "hotelId": {
             "type": "string"
           },
@@ -6352,6 +6357,11 @@
           "email": {
             "type": "string"
           },
+          "gstNumber": {
+            "description": "GSTIN (15 characters); send an empty string to clear it",
+            "example": "08AABCU9603R1ZM",
+            "type": "string"
+          },
           "hotelId": {
             "type": "string"
           },
@@ -10578,6 +10588,11 @@
             "type": "string"
           },
           "email": {
+            "type": "string"
+          },
+          "gstNumber": {
+            "description": "GSTIN (15 characters); send an empty string to clear it",
+            "example": "08AABCU9603R1ZM",
             "type": "string"
           },
           "location": {
