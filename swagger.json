@@ -46224,7 +46224,7 @@
             "bearer": []
           }
         ],
-        "summary": "Get all users with pagination",
+        "summary": "Staff list — full accounts with users.view, the staff directory otherwise",
         "tags": [
           "Users"
         ]
@@ -46757,7 +46757,7 @@
             "bearer": []
           }
         ],
-        "summary": "Get user by ID",
+        "summary": "One user — the full account with users.view or for yourself, the directory entry otherwise",
         "tags": [
           "Users"
         ]
