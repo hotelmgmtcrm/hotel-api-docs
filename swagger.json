@@ -1482,6 +1482,73 @@
         ],
         "type": "object"
       },
+      "CreateBookingGroupDto": {
+        "properties": {
+          "arrivalDate": {
+            "example": "2026-12-01",
+            "type": "string"
+          },
+          "billTo": {
+            "default": "master",
+            "enum": [
+              "master",
+              "individual"
+            ],
+            "type": "string"
+          },
+          "confirmed": {
+            "description": "Confirmed at once; otherwise every room is held tentatively",
+            "type": "boolean"
+          },
+          "contactEmail": {
+            "type": "string"
+          },
+          "contactName": {
+            "example": "Rohit Sharma",
+            "type": "string"
+          },
+          "contactPhone": {
+            "example": "+919800000000",
+            "type": "string"
+          },
+          "corporateAccountId": {
+            "type": "string"
+          },
+          "cutoffDate": {
+            "description": "Unnamed rooms may be released after this day",
+            "type": "string"
+          },
+          "departureDate": {
+            "example": "2026-12-03",
+            "type": "string"
+          },
+          "name": {
+            "example": "Sharma–Mehta wedding",
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "rooms": {
+            "items": {
+              "$ref": "#/components/schemas/GroupRoomLineDto"
+            },
+            "type": "array"
+          },
+          "travelAgencyId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "contactName",
+          "contactPhone",
+          "arrivalDate",
+          "departureDate",
+          "rooms"
+        ],
+        "type": "object"
+      },
       "CreateCallLogDto": {
         "properties": {
           "callType": {
@@ -6953,6 +7020,30 @@
         ],
         "type": "object"
       },
+      "GroupRoomLineDto": {
+        "properties": {
+          "count": {
+            "example": 5,
+            "type": "number"
+          },
+          "rate": {
+            "description": "Rate per room per night",
+            "example": 4000,
+            "type": "number"
+          },
+          "roomType": {
+            "description": "Room category: a room type id, or the room's type name",
+            "example": "deluxe",
+            "type": "string"
+          }
+        },
+        "required": [
+          "roomType",
+          "count",
+          "rate"
+        ],
+        "type": "object"
+      },
       "InspectRoomDto": {
         "properties": {
           "hkRoomId": {
@@ -7103,6 +7194,28 @@
         },
         "required": [
           "reason"
+        ],
+        "type": "object"
+      },
+      "NameGroupRoomDto": {
+        "properties": {
+          "bookingId": {
+            "type": "string"
+          },
+          "guestId": {
+            "description": "An existing guest",
+            "type": "string"
+          },
+          "name": {
+            "description": "Or a new one",
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "bookingId"
         ],
         "type": "object"
       },
@@ -20210,6 +20323,296 @@
         "summary": "Change this hotel's Front Office rules (only the keys sent)",
         "tags": [
           "Front Office Settings"
+        ]
+      }
+    },
+    "/groups": {
+      "get": {
+        "operationId": "GroupsController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Groups at this hotel, with rooms, named guests and who is in house",
+        "tags": [
+          "Groups"
+        ]
+      },
+      "post": {
+        "operationId": "GroupsController_create",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBookingGroupDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Book a group: free rooms of each category, one booking per room, all or none",
+        "tags": [
+          "Groups"
+        ]
+      }
+    },
+    "/groups/{id}": {
+      "get": {
+        "operationId": "GroupsController_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "A group and its rooming list",
+        "tags": [
+          "Groups"
+        ]
+      }
+    },
+    "/groups/{id}/cancel": {
+      "post": {
+        "operationId": "GroupsController_cancel",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Cancel the group and every room not yet in house",
+        "tags": [
+          "Groups"
+        ]
+      }
+    },
+    "/groups/{id}/check-in": {
+      "post": {
+        "operationId": "GroupsController_checkIn",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Check in every confirmed room; each room reports how it went",
+        "tags": [
+          "Groups"
+        ]
+      }
+    },
+    "/groups/{id}/check-out": {
+      "post": {
+        "operationId": "GroupsController_checkOut",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Check out every room in house; each room reports how it went",
+        "tags": [
+          "Groups"
+        ]
+      }
+    },
+    "/groups/{id}/confirm": {
+      "post": {
+        "operationId": "GroupsController_confirm",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Confirm every tentative room",
+        "tags": [
+          "Groups"
+        ]
+      }
+    },
+    "/groups/{id}/merge-folios": {
+      "post": {
+        "operationId": "GroupsController_merge",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Move every room's open charges onto the master room's folio",
+        "tags": [
+          "Groups"
+        ]
+      }
+    },
+    "/groups/{id}/release-unnamed": {
+      "post": {
+        "operationId": "GroupsController_release",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Give back the rooms no guest was named for (the master room stays)",
+        "tags": [
+          "Groups"
+        ]
+      }
+    },
+    "/groups/{id}/rooming": {
+      "post": {
+        "operationId": "GroupsController_name",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NameGroupRoomDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Name the guest of one room in the group",
+        "tags": [
+          "Groups"
         ]
       }
     },
