@@ -2774,6 +2774,11 @@
             "description": "City the guest arrived from",
             "type": "string"
           },
+          "arrivalInIndiaDate": {
+            "description": "The day the guest entered India",
+            "example": "2026-09-01",
+            "type": "string"
+          },
           "city": {
             "example": "Mumbai",
             "type": "string"
@@ -2838,6 +2843,9 @@
             "example": "Indian",
             "type": "string"
           },
+          "nextDestination": {
+            "type": "string"
+          },
           "panNumber": {
             "example": "ABCDE1234F",
             "type": "string"
@@ -2867,6 +2875,32 @@
             "type": "string"
           },
           "vipNotes": {
+            "type": "string"
+          },
+          "visaExpiryDate": {
+            "example": "2026-07-10",
+            "type": "string"
+          },
+          "visaIssueDate": {
+            "example": "2026-01-10",
+            "type": "string"
+          },
+          "visaIssuePlace": {
+            "type": "string"
+          },
+          "visaNumber": {
+            "type": "string"
+          },
+          "visaType": {
+            "enum": [
+              "tourist",
+              "business",
+              "employment",
+              "student",
+              "medical",
+              "e_visa",
+              "other"
+            ],
             "type": "string"
           }
         },
@@ -36538,6 +36572,72 @@
             "bearer": []
           }
         ],
+        "tags": [
+          "Front Office Reports"
+        ]
+      }
+    },
+    "/reports/foreign-guests": {
+      "get": {
+        "operationId": "ReportsController_foreignGuests",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "from",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "to",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Foreign guests who arrived in a period, for Form C: what is missing, what is due or overdue",
+        "tags": [
+          "Front Office Reports"
+        ]
+      }
+    },
+    "/reports/foreign-guests/{bookingId}/submitted": {
+      "post": {
+        "operationId": "ReportsController_markFormC",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "bookingId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Record that Form C was filed for a stay ({ reference }), or undo it ({ clear: true })",
         "tags": [
           "Front Office Reports"
         ]
