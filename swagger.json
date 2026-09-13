@@ -10819,6 +10819,110 @@
           }
         },
         "type": "object"
+      },
+      "WalkInDto": {
+        "properties": {
+          "additionalRoomIds": {
+            "description": "Further rooms on the same stay",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "adults": {
+            "example": 2,
+            "type": "number"
+          },
+          "advanceAmount": {
+            "description": "Advance taken at the desk — posted to the folio",
+            "type": "number"
+          },
+          "bookingSource": {
+            "default": "walk_in",
+            "enum": [
+              "walk_in",
+              "phone",
+              "website",
+              "ota",
+              "corporate",
+              "travel_agent"
+            ],
+            "type": "string"
+          },
+          "children": {
+            "example": 0,
+            "type": "number"
+          },
+          "guest": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CreateGuestDto"
+              }
+            ],
+            "description": "A guest to create as part of the check-in"
+          },
+          "guestId": {
+            "description": "An existing guest. Give this or `guest`, not both.",
+            "type": "string"
+          },
+          "nights": {
+            "description": "Nights; the departure date is counted from today",
+            "example": 2,
+            "type": "number"
+          },
+          "paymentMode": {
+            "enum": [
+              "cash",
+              "card",
+              "upi",
+              "bank_transfer",
+              "cheque"
+            ],
+            "type": "string"
+          },
+          "plan": {
+            "enum": [
+              "EP",
+              "CP",
+              "MAP",
+              "AP"
+            ],
+            "type": "string"
+          },
+          "planAmount": {
+            "description": "Per-day plan supplement",
+            "type": "number"
+          },
+          "purpose": {
+            "enum": [
+              "leisure",
+              "business",
+              "event",
+              "other"
+            ],
+            "type": "string"
+          },
+          "reference": {
+            "description": "Receipt number for the advance",
+            "type": "string"
+          },
+          "roomId": {
+            "description": "The room the guest is being put in",
+            "type": "string"
+          },
+          "specialRequests": {
+            "type": "string"
+          },
+          "totalAmount": {
+            "description": "Room total for the whole stay",
+            "type": "number"
+          }
+        },
+        "required": [
+          "roomId",
+          "nights"
+        ],
+        "type": "object"
       }
     },
     "securitySchemes": {
@@ -13816,6 +13920,36 @@
           }
         ],
         "summary": "Get available rooms for dates",
+        "tags": [
+          "Bookings"
+        ]
+      }
+    },
+    "/bookings/walk-in": {
+      "post": {
+        "operationId": "BookingsController_walkIn",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WalkInDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "A guest with no reservation: guest, booking and check-in in one act",
         "tags": [
           "Bookings"
         ]
