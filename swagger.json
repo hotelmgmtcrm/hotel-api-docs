@@ -20003,6 +20003,35 @@
         ]
       }
     },
+    "/folio/charges/{id}/receipt": {
+      "post": {
+        "operationId": "FolioController_receipt",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "The receipt for an advance received: numbered once, the same every time it is printed",
+        "tags": [
+          "Folio"
+        ]
+      }
+    },
     "/folio/charges/{id}/void": {
       "post": {
         "operationId": "FolioController_void",
