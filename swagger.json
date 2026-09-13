@@ -15655,6 +15655,123 @@
         ]
       }
     },
+    "/city-ledger": {
+      "get": {
+        "operationId": "CityLedgerController_summary",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Companies with money owing or on account, aged",
+        "tags": [
+          "City Ledger"
+        ]
+      }
+    },
+    "/city-ledger/{corporateAccountId}": {
+      "get": {
+        "operationId": "CityLedgerController_statement",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "corporateAccountId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "One company's invoices and payments",
+        "tags": [
+          "City Ledger"
+        ]
+      }
+    },
+    "/city-ledger/{corporateAccountId}/apply-credit": {
+      "post": {
+        "operationId": "CityLedgerController_applyCredit",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "corporateAccountId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Put a company's money on account against its open invoices",
+        "tags": [
+          "City Ledger"
+        ]
+      }
+    },
+    "/city-ledger/{corporateAccountId}/payments": {
+      "post": {
+        "operationId": "CityLedgerController_pay",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "corporateAccountId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecordPaymentDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Record a company's payment: applied to its invoices, the rest kept on account",
+        "tags": [
+          "City Ledger"
+        ]
+      }
+    },
     "/communication/bulk-send": {
       "post": {
         "operationId": "CommunicationController_bulkSend",
@@ -26319,6 +26436,45 @@
           }
         ],
         "summary": "Update invoice status / payment",
+        "tags": [
+          "Invoices"
+        ]
+      }
+    },
+    "/invoices/{id}/payments": {
+      "post": {
+        "operationId": "InvoicesController_pay",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecordPaymentDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Record money taken against an invoice",
         "tags": [
           "Invoices"
         ]
