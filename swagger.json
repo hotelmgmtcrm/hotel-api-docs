@@ -19872,6 +19872,44 @@
         ]
       }
     },
+    "/front-office/settings": {
+      "get": {
+        "operationId": "FoSettingsController_get",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "This hotel's Front Office rules",
+        "tags": [
+          "Front Office Settings"
+        ]
+      },
+      "put": {
+        "operationId": "FoSettingsController_save",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Change this hotel's Front Office rules (only the keys sent)",
+        "tags": [
+          "Front Office Settings"
+        ]
+      }
+    },
     "/guest-relations": {
       "get": {
         "operationId": "GuestRelationsController_findAll",
