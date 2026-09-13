@@ -32312,7 +32312,7 @@
     },
     "/platform/auth/login": {
       "post": {
-        "operationId": "PlatformController_login",
+        "operationId": "PlatformAuthController_login",
         "parameters": [],
         "requestBody": {
           "content": {
@@ -32330,7 +32330,7 @@
           }
         },
         "tags": [
-          "Platform"
+          "PlatformAuth"
         ]
       }
     },
