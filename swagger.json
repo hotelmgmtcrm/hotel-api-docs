@@ -7036,6 +7036,47 @@
         "properties": {},
         "type": "object"
       },
+      "PostFolioChargeDto": {
+        "properties": {
+          "amount": {
+            "description": "Always positive; the kind decides which way it moves the balance",
+            "example": 450,
+            "type": "number"
+          },
+          "description": {
+            "example": "Laundry — 3 shirts",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "charge",
+              "advance",
+              "paid_out"
+            ],
+            "type": "string"
+          },
+          "paymentMode": {
+            "enum": [
+              "cash",
+              "card",
+              "upi",
+              "bank_transfer",
+              "cheque"
+            ],
+            "type": "string"
+          },
+          "reference": {
+            "description": "Receipt or reference number",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "description",
+          "amount"
+        ],
+        "type": "object"
+      },
       "ProcessSalaryDto": {
         "properties": {
           "allowances": {
@@ -19310,6 +19351,45 @@
           }
         ],
         "summary": "A stay's folio: the charges signed to its rooms, and what is still open",
+        "tags": [
+          "Folio"
+        ]
+      }
+    },
+    "/folio/bookings/{bookingId}/charges": {
+      "post": {
+        "operationId": "FolioController_postCharge",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "bookingId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostFolioChargeDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Post a charge, an advance or a paid-out to a stay",
         "tags": [
           "Folio"
         ]
