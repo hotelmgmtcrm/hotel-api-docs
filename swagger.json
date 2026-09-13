@@ -1330,6 +1330,17 @@
           "billSerialNumber": {
             "type": "string"
           },
+          "billTo": {
+            "default": "guest",
+            "enum": [
+              "guest",
+              "company",
+              "travel_agent",
+              "group_owner",
+              "room_to_company_extras_to_guest"
+            ],
+            "type": "string"
+          },
           "bookingSource": {
             "enum": [
               "walk_in",
@@ -1358,6 +1369,10 @@
             "example": 0,
             "type": "number"
           },
+          "corporateAccountId": {
+            "description": "Company account the stay is billed to or booked through",
+            "type": "string"
+          },
           "departureFlightNumber": {
             "type": "string"
           },
@@ -1372,6 +1387,10 @@
           "idProofUrl": {
             "description": "ID proof scan URL",
             "type": "string"
+          },
+          "isComplimentary": {
+            "description": "A stay given away — the night audit posts no rent for it",
+            "type": "boolean"
           },
           "isVip": {
             "type": "boolean"
@@ -1433,6 +1452,8 @@
           },
           "status": {
             "enum": [
+              "tentative",
+              "waitlisted",
               "confirmed",
               "checked_in",
               "checked_out",
@@ -1444,6 +1465,10 @@
           "totalAmount": {
             "description": "Total room amount in INR",
             "type": "number"
+          },
+          "travelAgencyId": {
+            "description": "Travel agent who brought the booking",
+            "type": "string"
           },
           "vipNotes": {
             "type": "string"
@@ -13763,6 +13788,8 @@
             "required": false,
             "schema": {
               "enum": [
+                "tentative",
+                "waitlisted",
                 "confirmed",
                 "checked_in",
                 "checked_out",
@@ -13920,6 +13947,26 @@
           }
         ],
         "summary": "Get available rooms for dates",
+        "tags": [
+          "Bookings"
+        ]
+      }
+    },
+    "/bookings/billing-parties": {
+      "get": {
+        "operationId": "BookingsController_billingParties",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Companies and travel agents a reservation can be billed to or booked through",
         "tags": [
           "Bookings"
         ]
@@ -14118,6 +14165,35 @@
             "bearer": []
           }
         ],
+        "tags": [
+          "Bookings"
+        ]
+      }
+    },
+    "/bookings/{id}/confirm": {
+      "post": {
+        "operationId": "BookingsController_confirm",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Confirm a tentative or waitlisted booking",
         "tags": [
           "Bookings"
         ]
