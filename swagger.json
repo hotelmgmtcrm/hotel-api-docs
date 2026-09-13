@@ -31068,6 +31068,113 @@
         ]
       }
     },
+    "/night-audit/preview": {
+      "get": {
+        "operationId": "NightAuditController_preview",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "date",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "What closing this night would post, without posting it",
+        "tags": [
+          "Night Audit"
+        ]
+      }
+    },
+    "/night-audit/run": {
+      "post": {
+        "operationId": "NightAuditController_run",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Close the night: post the room rent and settle the arrivals who never came",
+        "tags": [
+          "Night Audit"
+        ]
+      }
+    },
+    "/night-audit/runs": {
+      "get": {
+        "operationId": "NightAuditController_log",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Every night that has been closed",
+        "tags": [
+          "Night Audit"
+        ]
+      }
+    },
+    "/night-audit/{id}/reverse": {
+      "post": {
+        "operationId": "NightAuditController_reverse",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Reopen a night closed in error",
+        "tags": [
+          "Night Audit"
+        ]
+      }
+    },
     "/notifications": {
       "post": {
         "operationId": "NotificationsController_send",
