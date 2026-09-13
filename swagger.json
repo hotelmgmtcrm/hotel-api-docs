@@ -37534,6 +37534,26 @@
         ]
       }
     },
+    "/rooms/rack": {
+      "get": {
+        "operationId": "RoomsController_roomRack",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Every room with who is in it tonight and who is due in today",
+        "tags": [
+          "Rooms"
+        ]
+      }
+    },
     "/rooms/{id}": {
       "delete": {
         "operationId": "RoomsController_remove",
