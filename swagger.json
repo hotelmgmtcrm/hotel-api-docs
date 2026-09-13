@@ -3299,6 +3299,11 @@
             "example": 1620,
             "type": "number"
           },
+          "taxableValue": {
+            "description": "Value the tax was worked out on — the amount after discount",
+            "example": 9000,
+            "type": "number"
+          },
           "total": {
             "description": "Final total in INR (amount + tax - discount)",
             "example": 10620,
