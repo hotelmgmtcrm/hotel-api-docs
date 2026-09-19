@@ -7298,6 +7298,66 @@
         ],
         "type": "object"
       },
+      "PublicBookingDto": {
+        "properties": {
+          "adults": {
+            "default": 2,
+            "type": "number"
+          },
+          "checkIn": {
+            "example": "2026-12-01",
+            "type": "string"
+          },
+          "checkOut": {
+            "example": "2026-12-03",
+            "type": "string"
+          },
+          "children": {
+            "default": 0,
+            "type": "number"
+          },
+          "companyWebsite": {
+            "description": "Leave empty",
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "otp": {
+            "description": "The code sent to the phone, when the hotel asks for one",
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "requestKey": {
+            "description": "A key the website makes once per attempt",
+            "type": "string"
+          },
+          "roomTypeId": {
+            "type": "string"
+          },
+          "rooms": {
+            "default": 1,
+            "type": "number"
+          }
+        },
+        "required": [
+          "roomTypeId",
+          "checkIn",
+          "checkOut",
+          "name",
+          "phone",
+          "requestKey"
+        ],
+        "type": "object"
+      },
       "PublicEnquiryDto": {
         "properties": {
           "adults": {
@@ -7340,6 +7400,22 @@
         },
         "required": [
           "name",
+          "phone"
+        ],
+        "type": "object"
+      },
+      "PublicOtpDto": {
+        "properties": {
+          "companyWebsite": {
+            "description": "Leave empty",
+            "type": "string"
+          },
+          "phone": {
+            "example": "+919812345678",
+            "type": "string"
+          }
+        },
+        "required": [
           "phone"
         ],
         "type": "object"
@@ -35436,6 +35512,80 @@
         ]
       }
     },
+    "/public/site/{slug}/bookings": {
+      "post": {
+        "operationId": "PublicSiteController_book",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PublicBookingDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "Book rooms — the booking appears at the desk like any other",
+        "tags": [
+          "Hotel website (public)"
+        ]
+      }
+    },
+    "/public/site/{slug}/bookings/{id}": {
+      "get": {
+        "operationId": "PublicSiteController_myBooking",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "phone",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "A guest looking up their own booking, with the phone they booked with",
+        "tags": [
+          "Hotel website (public)"
+        ]
+      }
+    },
     "/public/site/{slug}/enquiries": {
       "post": {
         "operationId": "PublicSiteController_enquire",
@@ -35465,6 +35615,40 @@
           }
         },
         "summary": "A question from the website — the hotel sees it in Web Enquiries",
+        "tags": [
+          "Hotel website (public)"
+        ]
+      }
+    },
+    "/public/site/{slug}/otp": {
+      "post": {
+        "operationId": "PublicSiteController_otp",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PublicOtpDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "A code to the guest's phone, when the hotel asks for one before booking",
         "tags": [
           "Hotel website (public)"
         ]
