@@ -7298,6 +7298,52 @@
         ],
         "type": "object"
       },
+      "PublicEnquiryDto": {
+        "properties": {
+          "adults": {
+            "type": "number"
+          },
+          "checkInDate": {
+            "type": "string"
+          },
+          "checkOutDate": {
+            "type": "string"
+          },
+          "children": {
+            "type": "number"
+          },
+          "companyWebsite": {
+            "description": "Leave empty",
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "roomTypeId": {
+            "type": "string"
+          },
+          "rooms": {
+            "type": "number"
+          },
+          "sourcePage": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "phone"
+        ],
+        "type": "object"
+      },
       "RecordPaymentDto": {
         "properties": {
           "amount": {
@@ -7659,6 +7705,20 @@
           "kind",
           "internalId",
           "externalId"
+        ],
+        "type": "object"
+      },
+      "SetRoomTypeImagesDto": {
+        "properties": {
+          "images": {
+            "items": {
+              "$ref": "#/components/schemas/WebsiteImageDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "images"
         ],
         "type": "object"
       },
@@ -10990,6 +11050,123 @@
         },
         "type": "object"
       },
+      "UpdateWebEnquiryDto": {
+        "properties": {
+          "staffNote": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "new",
+              "contacted",
+              "converted",
+              "closed"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "UpdateWebsiteProfileDto": {
+        "properties": {
+          "about": {
+            "type": "string"
+          },
+          "accentColor": {
+            "example": "#8B5E34",
+            "type": "string"
+          },
+          "amenities": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "autoConfirmBookings": {
+            "type": "boolean"
+          },
+          "cancellationPolicy": {
+            "type": "string"
+          },
+          "contactAddress": {
+            "type": "string"
+          },
+          "contactEmail": {
+            "type": "string"
+          },
+          "contactPhone": {
+            "type": "string"
+          },
+          "enquiryNotifyEmails": {
+            "type": "string"
+          },
+          "gallery": {
+            "items": {
+              "$ref": "#/components/schemas/WebsiteImageDto"
+            },
+            "type": "array"
+          },
+          "heroImages": {
+            "items": {
+              "$ref": "#/components/schemas/WebsiteImageDto"
+            },
+            "type": "array"
+          },
+          "highlights": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "isPublished": {
+            "type": "boolean"
+          },
+          "mapEmbedUrl": {
+            "type": "string"
+          },
+          "maxRoomsPerBooking": {
+            "description": "More rooms than this goes to the desk instead of confirming itself",
+            "type": "number"
+          },
+          "policies": {
+            "type": "string"
+          },
+          "requireOtp": {
+            "type": "boolean"
+          },
+          "seoDescription": {
+            "type": "string"
+          },
+          "seoImageUrl": {
+            "type": "string"
+          },
+          "seoTitle": {
+            "type": "string"
+          },
+          "slug": {
+            "example": "regal-heritage",
+            "type": "string"
+          },
+          "social": {
+            "$ref": "#/components/schemas/WebsiteSocialDto"
+          },
+          "tagline": {
+            "type": "string"
+          },
+          "theme": {
+            "enum": [
+              "heritage",
+              "modern",
+              "resort"
+            ],
+            "type": "string"
+          },
+          "whatsappNumber": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "UpsertOrganizationAdminDto": {
         "properties": {
           "email": {
@@ -11114,6 +11291,40 @@
           "roomId",
           "nights"
         ],
+        "type": "object"
+      },
+      "WebsiteImageDto": {
+        "properties": {
+          "caption": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "url"
+        ],
+        "type": "object"
+      },
+      "WebsiteSocialDto": {
+        "properties": {
+          "facebook": {
+            "type": "string"
+          },
+          "google": {
+            "type": "string"
+          },
+          "instagram": {
+            "type": "string"
+          },
+          "tripadvisor": {
+            "type": "string"
+          },
+          "youtube": {
+            "type": "string"
+          }
+        },
         "type": "object"
       }
     },
@@ -35135,6 +35346,154 @@
         ]
       }
     },
+    "/public/site/{slug}": {
+      "get": {
+        "operationId": "PublicSiteController_home",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "A published hotel website: its content, contact details and policies",
+        "tags": [
+          "Hotel website (public)"
+        ]
+      }
+    },
+    "/public/site/{slug}/availability": {
+      "get": {
+        "operationId": "PublicSiteController_availability",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "checkIn",
+            "required": true,
+            "schema": {
+              "example": "2026-12-01",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "checkOut",
+            "required": true,
+            "schema": {
+              "example": "2026-12-03",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "adults",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "children",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "rooms",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "How many rooms of each type are free for a stay, and what it would cost",
+        "tags": [
+          "Hotel website (public)"
+        ]
+      }
+    },
+    "/public/site/{slug}/enquiries": {
+      "post": {
+        "operationId": "PublicSiteController_enquire",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PublicEnquiryDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "A question from the website — the hotel sees it in Web Enquiries",
+        "tags": [
+          "Hotel website (public)"
+        ]
+      }
+    },
+    "/public/site/{slug}/rooms": {
+      "get": {
+        "operationId": "PublicSiteController_rooms",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "The room types on sale, with photos and the price they start at",
+        "tags": [
+          "Hotel website (public)"
+        ]
+      }
+    },
     "/purchase/grn": {
       "get": {
         "operationId": "GRNController_findAll",
@@ -47524,6 +47883,201 @@
         "summary": "Update vendor status (active, inactive, blacklisted)",
         "tags": [
           "Vendors"
+        ]
+      }
+    },
+    "/website/bookings": {
+      "get": {
+        "operationId": "WebsiteController_bookings",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Bookings that came from the website",
+        "tags": [
+          "Website"
+        ]
+      }
+    },
+    "/website/enquiries": {
+      "get": {
+        "operationId": "WebsiteController_enquiries",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "status",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Questions sent from the website",
+        "tags": [
+          "Website"
+        ]
+      }
+    },
+    "/website/enquiries/{id}": {
+      "patch": {
+        "operationId": "WebsiteController_updateEnquiry",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateWebEnquiryDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Mark an enquiry contacted, converted or closed, with a note",
+        "tags": [
+          "Website"
+        ]
+      }
+    },
+    "/website/profile": {
+      "get": {
+        "operationId": "WebsiteController_profile",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "This hotel's website: its content, address and settings",
+        "tags": [
+          "Website"
+        ]
+      },
+      "put": {
+        "operationId": "WebsiteController_saveProfile",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateWebsiteProfileDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Save the website content, and publish or unpublish it",
+        "tags": [
+          "Website"
+        ]
+      }
+    },
+    "/website/room-types": {
+      "get": {
+        "operationId": "WebsiteController_roomTypes",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "The room types the website shows, with their photos and public rate",
+        "tags": [
+          "Website"
+        ]
+      }
+    },
+    "/website/room-types/{id}/images": {
+      "put": {
+        "operationId": "WebsiteController_setImages",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetRoomTypeImagesDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "A room type's photos, in the order the website shows them",
+        "tags": [
+          "Website"
         ]
       }
     },
