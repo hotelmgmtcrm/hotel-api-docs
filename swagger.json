@@ -7410,6 +7410,10 @@
             "description": "Leave empty",
             "type": "string"
           },
+          "email": {
+            "description": "Needed when the hotel sends its codes by email",
+            "type": "string"
+          },
           "phone": {
             "example": "+919812345678",
             "type": "string"
@@ -11203,6 +11207,15 @@
           "maxRoomsPerBooking": {
             "description": "More rooms than this goes to the desk instead of confirming itself",
             "type": "number"
+          },
+          "otpChannel": {
+            "description": "Where the booking code is sent",
+            "enum": [
+              "sms",
+              "email",
+              "both"
+            ],
+            "type": "string"
           },
           "policies": {
             "type": "string"
