@@ -34756,6 +34756,20 @@
         ]
       }
     },
+    "/platform/modules": {
+      "get": {
+        "operationId": "PlatformController_getModuleCatalog",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Platform"
+        ]
+      }
+    },
     "/platform/organizations": {
       "get": {
         "operationId": "PlatformController_getOrganizations",
