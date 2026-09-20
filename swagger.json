@@ -11177,6 +11177,11 @@
           "contactPhone": {
             "type": "string"
           },
+          "customDomain": {
+            "description": "The hotel's own domain; empty to remove it",
+            "example": "theregalheritage.com",
+            "type": "string"
+          },
           "enquiryNotifyEmails": {
             "type": "string"
           },
@@ -35432,6 +35437,30 @@
         "summary": "Where a guest's order stands: pending, accepted, or rejected with the reason",
         "tags": [
           "QR ordering (guests)"
+        ]
+      }
+    },
+    "/public/site/by-domain": {
+      "get": {
+        "operationId": "PublicSiteController_byDomain",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "host",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Which published hotel answers on a given domain",
+        "tags": [
+          "Hotel website (public)"
         ]
       }
     },
