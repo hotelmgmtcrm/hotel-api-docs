@@ -48156,6 +48156,66 @@
         ]
       }
     },
+    "/website/domain": {
+      "get": {
+        "operationId": "WebsiteController_domain",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Where the hotel's own domain stands: saved, handed to the host, DNS, live",
+        "tags": [
+          "Website"
+        ]
+      }
+    },
+    "/website/domain/connect": {
+      "post": {
+        "operationId": "WebsiteController_connectDomain",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Hand the saved domain to the host so it answers on it",
+        "tags": [
+          "Website"
+        ]
+      }
+    },
+    "/website/domain/disconnect": {
+      "post": {
+        "operationId": "WebsiteController_disconnectDomain",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Take the domain off the host again",
+        "tags": [
+          "Website"
+        ]
+      }
+    },
     "/website/enquiries": {
       "get": {
         "operationId": "WebsiteController_enquiries",
