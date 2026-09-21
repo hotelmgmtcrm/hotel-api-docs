@@ -34883,6 +34883,29 @@
         ]
       }
     },
+    "/platform/organizations/{id}/health": {
+      "get": {
+        "operationId": "PlatformController_getOrganizationHealth",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Platform"
+        ]
+      }
+    },
     "/platform/organizations/{id}/stats": {
       "get": {
         "operationId": "PlatformController_getOrganizationStats",
