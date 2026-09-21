@@ -21444,6 +21444,20 @@
         ]
       }
     },
+    "/health": {
+      "get": {
+        "operationId": "AppController_health",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "App"
+        ]
+      }
+    },
     "/hk/all-rooms": {
       "get": {
         "operationId": "HousekeepingController_getAllRoomsForDispatch",
