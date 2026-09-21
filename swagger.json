@@ -545,6 +545,92 @@
         ],
         "type": "object"
       },
+      "BookingInclusionDto": {
+        "properties": {
+          "amount": {
+            "example": 500,
+            "type": "number"
+          },
+          "name": {
+            "example": "Extra bed",
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "postingRule": {
+            "default": "once",
+            "enum": [
+              "daily",
+              "once",
+              "group"
+            ],
+            "type": "string"
+          },
+          "roomId": {
+            "description": "The room it belongs to; absent means the booking as a whole",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "amount"
+        ],
+        "type": "object"
+      },
+      "BookingRoomLineDto": {
+        "properties": {
+          "adults": {
+            "description": "Adults in this room",
+            "type": "number"
+          },
+          "checkInDate": {
+            "description": "Arrival for this room; the booking's own if absent",
+            "type": "string"
+          },
+          "checkInTime": {
+            "example": "14:00",
+            "type": "string"
+          },
+          "checkOutDate": {
+            "description": "Departure for this room; the booking's own if absent",
+            "type": "string"
+          },
+          "checkOutTime": {
+            "example": "11:00",
+            "type": "string"
+          },
+          "children": {
+            "description": "Children in this room",
+            "type": "number"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "rate": {
+            "description": "Nightly rate for this room",
+            "type": "number"
+          },
+          "ratePlanId": {
+            "type": "string"
+          },
+          "rateTaxInclusive": {
+            "description": "Whether `rate` already contains the tax",
+            "type": "boolean"
+          },
+          "roomId": {
+            "description": "The room this line is for",
+            "type": "string"
+          },
+          "roomTypeId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "roomId"
+        ],
+        "type": "object"
+      },
       "BroadcastDto": {
         "properties": {
           "imageUrl": {
@@ -1314,7 +1400,7 @@
             "type": "array"
           },
           "additionalRoomIds": {
-            "description": "Additional rooms in the same booking",
+            "description": "Additional rooms in the same booking, all on the booking's own dates and rate",
             "items": {
               "type": "string"
             },
@@ -1388,6 +1474,13 @@
             "description": "ID proof scan URL",
             "type": "string"
           },
+          "inclusions": {
+            "description": "What the booking comes with beyond the room. Sending this replaces the booking's inclusions.",
+            "items": {
+              "$ref": "#/components/schemas/BookingInclusionDto"
+            },
+            "type": "array"
+          },
           "isComplimentary": {
             "description": "A stay given away — the night audit posts no rent for it",
             "type": "boolean"
@@ -1442,6 +1535,13 @@
           "roomId": {
             "description": "Primary room UUID",
             "type": "string"
+          },
+          "roomLines": {
+            "description": "The booking's rooms, each with its own stay where it differs. Takes the place of `roomId`/`additionalRoomIds` when sent; those two still work on their own for a booking whose rooms share everything.",
+            "items": {
+              "$ref": "#/components/schemas/BookingRoomLineDto"
+            },
+            "type": "array"
           },
           "signatureData": {
             "description": "Base64 PNG signature data",
