@@ -23142,6 +23142,35 @@
         ]
       }
     },
+    "/hk/room-status": {
+      "get": {
+        "operationId": "HousekeepingController_roomStatuses",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "hotelId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Each room's current housekeeping status — roomId and status only",
+        "tags": [
+          "Housekeeping"
+        ]
+      }
+    },
     "/hk/room-status/{id}": {
       "get": {
         "operationId": "HousekeepingController_getRoomStatus",
