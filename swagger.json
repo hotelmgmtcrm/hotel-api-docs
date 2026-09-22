@@ -37979,6 +37979,35 @@
         ]
       }
     },
+    "/reports/reception-dashboard": {
+      "get": {
+        "operationId": "ReportsController_receptionDashboard",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "date",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Arrivals, departures, occupancy, open complaints and the in-house list, together",
+        "tags": [
+          "Front Office Reports"
+        ]
+      }
+    },
     "/reports/revenue-sources": {
       "get": {
         "operationId": "ReportsController_revenueSources",
