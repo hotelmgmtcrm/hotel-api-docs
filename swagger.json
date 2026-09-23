@@ -7306,6 +7306,13 @@
             "description": "An existing guest",
             "type": "string"
           },
+          "idNumber": {
+            "type": "string"
+          },
+          "idType": {
+            "description": "Aadhaar, passport, driving licence…",
+            "type": "string"
+          },
           "name": {
             "description": "Or a new one",
             "type": "string"
